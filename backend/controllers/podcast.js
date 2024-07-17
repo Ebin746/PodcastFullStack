@@ -47,7 +47,7 @@ try {
 const getPodcast=async (req,res,next)=>{
    try {
     const id=req.params.id;
-    let data =await podcastSchema.findById(id);
+    let data =await PodcastSchema.findById(id);
     if(!data){
         res.status(404).json({message:"podcast Not Found"});
     }
@@ -57,4 +57,29 @@ const getPodcast=async (req,res,next)=>{
    }
 
 }
-module.exports={addPodcast,getPodcasts,getPodcast}
+const deletePodcast=async(req,res,next)=>{
+  try {
+    let {podcastId,categoryId}=req.params.id
+    let data=await PodcastSchema.findOneAndDelete(podcastId);
+    await CategorySchema.findByIdAndUpdate(categoryId,{
+      $pull:{podcasts:podcastId}
+    })
+    res.status(200).json({message :"The podcast has been deleted ",data});
+
+  } catch (error) {
+    next(error);
+  }
+}
+const updatePodcast=async(req,res,next)=>{
+  try {
+    let id=req.params.id
+    const { title, about, creator, views, imageUrl } =req.body;
+    let data=await PodcastSchema.findByIdAndUpdate({
+      title,about,creator,views,imageUrl
+    }).save();
+    res.status(200).json({message:"the podcast updated",data});
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports={addPodcast,getPodcasts,getPodcast,deletePodcast,updatePodcast}

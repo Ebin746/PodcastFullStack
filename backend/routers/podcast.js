@@ -37,6 +37,9 @@ router.post("/uploads", upload.single("file"), async (req, res, next) => {
   }
 });
 
-router.post("/",addPodcast)
-router.get("/",getPodcasts)
+router.post("/",addPodcast);
+router.get("/",getPodcasts);
+router.get("/:id",getPodcast);
+router.delete("/:podcastId/:categoryId");
+router.put("/:id")
 module.exports = router;
