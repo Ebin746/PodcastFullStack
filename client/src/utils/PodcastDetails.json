@@ -1,0 +1,246 @@
+{
+  "culture": [
+    {
+      "id": 1,
+      "title": "Cultural Podcast 1",
+      "about": "Explore diverse cultural topics and traditions from around the globe.",
+      "creator": {
+        "name": "Culture Aficionado 1",
+        "avatar": "/images/avatar_culture1.jpg"
+      },
+      "views": 2500,
+      "imageUrl": "/images/podcast_culture1.jpg"
+    }
+  ],
+  "business": [
+    {
+      "id": 1,
+      "title": "Business Podcast 1",
+      "about": "Discover innovative business strategies and success stories from industry leaders.",
+      "creator": {
+        "name": "Business Expert 1",
+        "avatar": "/images/avatar_business1.jpg"
+      },
+      "views": 2200,
+      "imageUrl": "/images/podcast_business1.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Business Hacks",
+      "about": "Learn actionable tips and hacks to boost your business efficiency and growth.",
+      "creator": {
+        "name": "Business Coach 2",
+        "avatar": "/images/avatar_business2.jpg"
+      },
+      "views": 1800,
+      "imageUrl": "/images/podcast_business2.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Interviews ",
+      "about": "Gain insights from successful entrepreneurs and executives in various industries.",
+      "creator": {
+        "name": "Market Analyst 3",
+        "avatar": "/images/avatar_business3.jpg"
+      },
+      "views": 3500,
+      "imageUrl": "/images/podcast_business3.jpg"
+    },
+    {
+      "id": 4,
+      "title": "The Future of Business",
+      "about": "Explore emerging trends and technologies shaping the future of the business landscape.",
+      "creator": {
+        "name": "Futurist 4",
+        "avatar": "/images/avatar_business4.jpg"
+      },
+      "views": 1200,
+      "imageUrl": "/images/podcast_business4.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Marketing Strategies",
+      "about": "Discover effective marketing strategies to attract customers and scale your business.",
+      "creator": {
+        "name": "Marketing Expert 5",
+        "avatar": "/images/avatar_business5.jpg"
+      },
+      "views": 2700,
+      "imageUrl": "/images/podcast_business5.jpg"
+    }
+  ],
+  "education": [
+    {
+      "id": 1,
+      "title": "Educational  Podcast 1",
+      "about": "Gain valuable insights and knowledge on various educational topics and methodologies.",
+      "creator": {
+        "name": "Education Guru 1",
+        "avatar": "/images/avatar_education1.jpg"
+      },
+      "views": 3000,
+      "imageUrl": "/images/podcast_education1.jpg"
+    }
+  ],
+  "health": [
+    {
+      "id": 1,
+      "title": "Wellness Podcast 1",
+      "about": "Learn about maintaining good health and wellness through expert advice and tips.",
+      "creator": {
+        "name": "Health Enthusiast 1",
+        "avatar": "/images/avatar_health1.jpg"
+      },
+      "views": 2800,
+      "imageUrl": "/images/podcast_health1.jpg"
+    }
+  ],
+  "comedy": [
+    {
+      "id": 1,
+      "title": "Comedy Podcast 1",
+      "about": "Laugh out loud with hilarious comedy sketches and funny anecdotes.",
+      "creator": {
+        "name": "Comedian 1",
+        "avatar": "/images/avatar_comedy1.jpg"
+      },
+      "views": 1200,
+      "imageUrl": "/images/podcast_comedy1.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Comedy Podcast 2",
+      "about": "Get ready for non-stop laughter with this comedy podcast featuring stand-up routines and comedic discussions.",
+      "creator": {
+        "name": "Comedian 2",
+        "avatar": "/images/avatar_comedy2.jpg"
+      },
+      "views": 900,
+      "imageUrl": "/images/podcast_comedy2.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Comedy Podcast 3",
+      "about": "Join the funniest comedians as they share hilarious stories and jokes in this comedy podcast.",
+      "creator": {
+        "name": "Comedian 3",
+        "avatar": "/images/avatar_comedy3.jpg"
+      },
+      "views": 1500,
+      "imageUrl": "/images/podcast_comedy3.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Comedy Podcast 4",
+      "about": "Chuckle your way through the day with this side-splitting comedy podcast featuring witty banter and humorous anecdotes.",
+      "creator": {
+        "name": "Comedian 4",
+        "avatar": "/images/avatar_comedy4.jpg"
+      },
+      "views": 1100,
+      "imageUrl": "/images/podcast_comedy4.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Comedy Podcast 5",
+      "about": "Prepare to laugh until it hurts with this comedy podcast that promises to tickle your funny bone.",
+      "creator": {
+        "name": "Comedian 5",
+        "avatar": "/images/avatar_comedy5.jpg"
+      },
+      "views": 1300,
+      "imageUrl": "/images/podcast_comedy5.jpg"
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": " News Podcast 1",
+      "about": "Stay updated with the latest breaking news and headlines from around the world.",
+      "creator": {
+        "name": "News Reporter 1",
+        "avatar": "/images/avatar_news1.jpg"
+      },
+      "views": 2700,
+      "imageUrl": "/images/podcast_news1.jpg"
+    }
+  ],
+  "science": [
+    {
+      "id": 1,
+      "title": "Science  Podcast 1",
+      "about": "Explore fascinating scientific discoveries and theories with leading experts.",
+      "creator": {
+        "name": "Science Enthusiast 1",
+        "avatar": "/images/avatar_science1.jpg"
+      },
+      "views": 3100,
+      "imageUrl": "/images/podcast_science1.jpg"
+    }
+  ],
+  "history": [
+    {
+      "id": 1,
+      "title": "Historical Podcast 1",
+      "about": "Delve into intriguing historical events and figures from different eras.",
+      "creator": {
+        "name": "History Buff 1",
+        "avatar": "/images/avatar_history1.jpg"
+      },
+      "views": 2600,
+      "imageUrl": "/images/podcast_history1.jpg"
+    }
+  ],
+  "religion": [
+    {
+      "id": 1,
+      "title": "Religious  Podcast 1",
+      "about": "Reflect on spiritual teachings and beliefs from various religious traditions.",
+      "creator": {
+        "name": "Religion Scholar 1",
+        "avatar": "/images/avatar_religion1.jpg"
+      },
+      "views": 2400,
+      "imageUrl": "/images/podcast_religion1.jpg"
+    }
+  ],
+  "development": [
+    {
+      "id": 1,
+      "title": " Development Podcast",
+      "about": "Achieve personal growth and development with insightful tips and strategies.",
+      "creator": {
+        "name": "Development Coach 1",
+        "avatar": "/images/avatar_development1.jpg"
+      },
+      "views": 2900,
+      "imageUrl": "/images/podcast_development1.jpg"
+    }
+  ],
+  "sports": [
+    {
+      "id": 1,
+      "title": "Sports  Podcast 1",
+      "about": "Stay updated with the latest sports news, analysis, and discussions.",
+      "creator": {
+        "name": "Sports Enthusiast 1",
+        "avatar": "/images/avatar_sports1.jpg"
+      },
+      "views": 3300,
+      "imageUrl": "/images/podcast_sports1.jpg"
+    }
+  ],
+  "crime": [
+    {
+      "id": 1,
+      "title": " Crime Podcast 1",
+      "about": "Uncover gripping true crime stories and mysteries from around the world.",
+      "creator": {
+        "name": "Crime Enthusiast 1",
+        "avatar": "/images/avatar_crime1.jpg"
+      },
+      "views": 1800,
+      "imageUrl": "/images/podcast_crime1.jpg"
+    }
+  ]
+}
