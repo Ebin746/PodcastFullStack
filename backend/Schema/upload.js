@@ -1,9 +1,9 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 
-const fileStorage=new mongoose.Schema({
-    filename: String,
-    path: String,
-    originalname: String,
-})
+const fileStorage = new mongoose.Schema({
+  filename: String,
+  path: String,
+  originalname: String,
+});
 
-module.exports=mongoose.model("audio",fileStorage);
+module.exports = mongoose.model("audio", fileStorage);

@@ -1,13 +1,15 @@
-const mongoose=require("mongoose");
-const categorySchema=new mongoose.Schema({
-    name:{
-        type:String,
-        require:true
+const mongoose = require("mongoose");
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    require: true,
+  },
+  podcasts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Podcast",
     },
-    podcasts:[{
-        type:mongoose.Schema.Types.ObjectId,ref:'Podcast'
-    }]
-})
+  ],
+});
 
-
-module.exports=mongoose.model('Category',categorySchema);
+module.exports = mongoose.model("Category", categorySchema);
