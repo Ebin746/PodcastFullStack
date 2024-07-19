@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const uploadSchema = require("../Schema/upload");
+const{ fileUpload}=require("../controllers/multer");
 const {
   addPodcast,
   getPodcasts,
