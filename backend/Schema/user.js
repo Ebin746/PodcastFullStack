@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
       ref: "Podcast",
     },
   ],
-  Uploads: [
+  uploads: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Podcast",

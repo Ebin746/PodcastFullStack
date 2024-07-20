@@ -8,6 +8,7 @@ const dataBaseConnection = require("./DataBase/dataBase");
 
 const podcastRouter = require("./routers/podcast");
 const authRouter = require("./routers/auth");
+const userRouter=require("./routers/user");
 
 const app = express();
 
@@ -19,7 +20,8 @@ if (!fs.existsSync(uploadDir)) {
 app.use(cors());
 app.use(express.json());
 app.use("/api", podcastRouter);
-app.use("/api",authRouter)
+app.use("/api",authRouter);
+app.use("/api",userRouter);
 app.use((error, req, res, next) => {
   let ErrorStatus = error.status || 500;
   let ErrorMessage = error.message || "some errors are detected";
