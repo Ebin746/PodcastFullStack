@@ -1,6 +1,6 @@
 const UserSchema = require("../Schema/user");
 const bcrypt = require("bcrypt");
-const genrateToken=require("../utils/genrateToken");
+const genrateToken = require("../utils/genrateToken");
 
 const signup = async (req, res, next) => {
   const { userName, email, password, imageUrl } = req.body;
@@ -20,8 +20,11 @@ const signup = async (req, res, next) => {
       password: hashedPassword,
       imageUrl,
     }).save();
-    let token= genrateToken(user);
-    res.status(201).json({ message: "successfully signup ", user ,token});
+    let token = genrateToken(user);
+    res
+      .status(201)
+      .headers("authorization", `Bearer ${token}`)
+      .json({ message: "successfully signup ", user, token });
   } catch (error) {
     next(error);
   }
@@ -40,8 +43,11 @@ const login = async (req, res, next) => {
     if (!realPassword) {
       return res.status(404).json({ message: "not matching password" });
     }
-    let token=genrateToken(user);
-    res.status(200).json({ message: "succesfully login ", user ,token});
+    let token = genrateToken(user);
+    res
+      .status(200)
+      .headers("authorization", `Bearer ${token}`)
+      .json({ message: "succesfully login ", user, token });
   } catch (error) {
     next(error);
   }
