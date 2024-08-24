@@ -5,11 +5,12 @@ const {
   getPodcasts,
   getPodcast,
 } = require("../controllers/podcast");
+const { verifyToken } = require("../middlewares/jwtVerify.middleware");
 const { upload } = require("../middlewares/multer.middleware");
 
 router.post("/uploads", upload.single("file"), fileUpload);
 
-router.post("/", addPodcast);
+router.post("/",addPodcast);
 router.get("/", getPodcasts);
 router.get("/:id", getPodcast);
 router.delete("/:podcastId/:categoryId");

@@ -1,37 +1,38 @@
-import React from "react";
+
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PodcastCard from "../components/PodcastCard";
-import PodcastDetails from "../utils/PodcastDetails.json";
+import   axios from "axios";
+import {  useEffect ,useState} from "react";
 
-const DashBord = () => {
-  const genres = [
-    "culture",
-    "business",
-    "education",
-    "health",
-    "comedy",
-    "news",
-    "science",
-    "history",
-    "religion",
-    "development",
-    "sports",
-    "crime",
-  ];
- 
+const DashBord =() => {
+  const [podcastDetails,setPodcastDetails]=useState([]);
+  const fetchPosdcasts=async()=>{
+try {
+  let response=await axios.get("/api");
+  setPodcastDetails(response.data);
+  console.log(response.data);
+} catch (error) {
+  console.log(error);
+}
+    }
+   useEffect(()=>{
+fetchPosdcasts()
+
+   },[])
+   console.log(podcastDetails);
   return (
     <MainDashBoard>
-      {genres.map((category, i) => (
-        <Filter key={i} id={category}>
+      {podcastDetails.map((category, i) => (
+        <Filter key={i} id={category._id}>
           <Topic>
-            {category.toLocaleUpperCase()}
+            {category.name.toLocaleUpperCase()}
             <Link className="categorys" to={"#"}>
               <span>Show all</span>
             </Link>
           </Topic>
           <PodCast>
-            {PodcastDetails[category].map((podcast, j) => (
+            {category.podcasts.map((podcast, j) => (
               <PodcastCard
                 key={j}
                 title={podcast.title}

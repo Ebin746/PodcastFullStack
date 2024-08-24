@@ -1,3 +1,4 @@
+const uploadSchema=require("../Schema/upload")
 const fileUpload =async (req, res, next) => {
     try {
       if(!req.file){ 
