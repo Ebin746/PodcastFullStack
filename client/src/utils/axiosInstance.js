@@ -1,11 +1,12 @@
-// utils/axiosInstance.js
+
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: '/api', // Set your base URL here
-  headers: {
-    'Content-Type': 'application/json',
-  },
+baseURL: '/api',
+headers:{
+  'Content-Type':'application/json',
+},
+  withCredentials: true, 
 });
-
+// baseURL: 'https://testprojectforfar.onrender.com',
 export default axiosInstance;

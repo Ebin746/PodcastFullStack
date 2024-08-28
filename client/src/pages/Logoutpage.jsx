@@ -1,6 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const LogoutCard = ({ handleLogout }) => {
+
+    function ConformLogout(){
+        localStorage.clear();
+        handleLogout()
+    }
+  return (
+    <LogoutCardContainer className={'visible'}>
+      <LogoutContent>
+        <LogoutText>Are you sure you want to log out?</LogoutText>
+        <div>
+          <LogoutButton onClick={() => ConformLogout()}>Confirm</LogoutButton>
+          <NotNowButton onClick={handleLogout}>Not Now</NotNowButton>
+        </div>
+      </LogoutContent>
+    </LogoutCardContainer>
+  );
+};
+
+export default LogoutCard;
+
 const LogoutCardContainer = styled.div`
   position: absolute;
   width: 200px;
@@ -49,23 +70,3 @@ const NotNowButton = styled(LogoutButton)`
   background-color: #e0e0e0;
   color: #333;
 `;
-
-const LogoutCard = ({ handleLogout }) => {
-
-    function ConformLogout(){
-        alert("Logout done")
-    }
-  return (
-    <LogoutCardContainer className={'visible'}>
-      <LogoutContent>
-        <LogoutText>Are you sure you want to log out?</LogoutText>
-        <div>
-          <LogoutButton onClick={() => ConformLogout()}>Confirm</LogoutButton>
-          <NotNowButton onClick={handleLogout}>Not Now</NotNowButton>
-        </div>
-      </LogoutContent>
-    </LogoutCardContainer>
-  );
-};
-
-export default LogoutCard;

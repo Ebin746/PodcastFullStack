@@ -21,6 +21,7 @@ app.use(cors({
   origin:"http://localhost:5173/",
   credentials:true
 }));
+
 app.use(cookie_parser())
 app.use(express.json());
 app.use("/api", podcastRouter);

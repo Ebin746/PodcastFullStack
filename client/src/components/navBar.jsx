@@ -4,13 +4,16 @@ import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const navBar = ({ toggle, handleLogin }) => {
+  const Details=localStorage.getItem('user');
+  let userDetails=Details?JSON.parse(Details):null;
+  console.log(userDetails);
   return (
     <>
       <NavBarDiv>
         <MenuRoundedIcon className="menu" onClick={() => toggle()} />
-        <ButtonId onClick={() => handleLogin()}>
+        <ButtonId onClick={() => !userDetails?handleLogin():null} disabled={userDetails}>
           <Person2RoundedIcon />
-          <p>Login</p>
+          <p>{userDetails?userDetails.userName:"Login"}</p>
         </ButtonId>
       </NavBarDiv>
     </>

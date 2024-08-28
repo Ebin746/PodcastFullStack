@@ -31,6 +31,7 @@ fetchPosdcasts()  },[])
             {category.podcasts.map((podcast, j) => (
               <PodcastCard
                 key={j}
+                id={podcast._id}
                 title={podcast.title}
                 about={podcast.about}
                 creator={podcast.creator.name}

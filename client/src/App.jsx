@@ -32,21 +32,6 @@ const App = () => {
     console.log("changed");
   }
 
-  let ids = [
-    "culture",
-    "business",
-    "education",
-    "health",
-    "comedy",
-    "news",
-    "science",
-    "history",
-    "religion",
-    "development",
-    "sports",
-    "crime",
-  ];
-
   return (
     <ThemeProvider theme={darkMod ? darkTheme : lightTheme}>
       <BrowserRouter>

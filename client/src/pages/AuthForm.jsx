@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axiosInstance from '../utils/axiosInstance';
 
 
+
+
 const AuthForm = ({ handleLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [userName, setUserName] = useState('');
@@ -12,20 +14,26 @@ const AuthForm = ({ handleLogin }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const validateForm = () => {
+    if (!userName || !password || (!isLogin && !email) || (!isLogin && !confirmPassword)) {
+      setErrorMessage('Please fill out all fields.');
+      return false;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
     setLoading(true);
 
-    // Validation
-    if (!userName || !password || (!isLogin && !email) || (!isLogin && !confirmPassword)) {
-      setErrorMessage('Please fill out all fields.');
-      setLoading(false);
-      return;
-    }
-
-    if (!isLogin && password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+    if (!validateForm()) {
       setLoading(false);
       return;
     }
@@ -33,57 +41,27 @@ const AuthForm = ({ handleLogin }) => {
     try {
       let response;
       if (isLogin) {
-        response = await axiosInstance.post("/login", {
-          userName,
-          password
-        });
-        console.log(response.data);
+        response = await axiosInstance.post("/login", { userName, password });
+        console.log(response.data.user)
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       } else {
-        console.log(userName);
-        response = await axiosInstance.post("/signup", {
-          userName,
-          email,
-          password
-        });
-        console.log(response.data);
+        response = await axiosInstance.post("/signup", { userName, email, password });
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
 
-      // Log the response for debugging
       console.log(response.data);
-       
-  
-      // if (enCrypttoken) {
-      //   // Decode the token
-       
-      //   console.log(decodedToken);
-      //   // Store decoded token in localStorage
-      //   localStorage.setItem('user', JSON.stringify(decodedToken));
-      // } else {
-      //   console.error('Token not found in cookies.');
-      //   setErrorMessage("token missing");}
-
-
-      // For example, store user in localStorage:
-   
 
       alert(`${isLogin ? 'Login' : 'Signup'} successful!`);
 
-      // Clear form fields
       setUserName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
 
-      // Close the form/modal if needed
-      handleLogin(); // Call handleLogin to close the modal
+      handleLogin();
     } catch (error) {
       console.error('Authentication Error:', error);
-
-      if (error.response && error.response.data && error.response.data.message) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
-      }
+      setErrorMessage(error.response?.data?.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -97,7 +75,7 @@ const AuthForm = ({ handleLogin }) => {
   return (
     <Container>
       <Card>
-        <CloseButton onClick={handleLogin}>&times;</CloseButton> {/* Close button */}
+        <CloseButton onClick={handleLogin}>&times;</CloseButton>
         <Title>{isLogin ? 'Login' : 'Signup'}</Title>
         <form onSubmit={handleSubmit}>
           <InputContainer>
@@ -154,6 +132,7 @@ const AuthForm = ({ handleLogin }) => {
 };
 
 export default AuthForm;
+
 
 const Button = styled.button`
   width: 100%;
