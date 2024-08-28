@@ -2,13 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-
+const cookie_parser=require("cookie-parser")
 const cors = require("cors");
 const dataBaseConnection = require("./DataBase/dataBase");
 
 const podcastRouter = require("./routers/podcast");
 const authRouter = require("./routers/auth");
-const userRouter=require("./routers/user");
+const userRouter = require("./routers/user");
 
 const app = express();
 
@@ -17,11 +17,15 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:5173/",
+  credentials:true
+}));
+app.use(cookie_parser())
 app.use(express.json());
 app.use("/api", podcastRouter);
-app.use("/api",authRouter);
-app.use("/api",userRouter);
+app.use("/api", authRouter);
+app.use("/api", userRouter);
 app.use((error, req, res, next) => {
   let ErrorStatus = error.status || 500;
   let ErrorMessage = error.message || "some errors are detected";

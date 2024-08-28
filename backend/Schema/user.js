@@ -8,9 +8,6 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
   password: { type: String, require: true },
-  imageUrl: {
-    type: String,
-  },
   favarates: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,12 +20,10 @@ const UserSchema = new mongoose.Schema({
       ref: "Podcast",
     },
   ],
-  isAdmin: [
-    {
-      type: Boolean,
-      default: false,
-    },
-  ],
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

@@ -11,16 +11,12 @@ const DashBord =() => {
 try {
   let response=await axios.get("/api");
   setPodcastDetails(response.data);
-  console.log(response.data);
 } catch (error) {
   console.log(error);
 }
     }
    useEffect(()=>{
-fetchPosdcasts()
-
-   },[])
-   console.log(podcastDetails);
+fetchPosdcasts()  },[])
   return (
     <MainDashBoard>
       {podcastDetails.map((category, i) => (

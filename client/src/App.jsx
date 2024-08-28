@@ -7,7 +7,7 @@ import NavBar from "./components/navBar.jsx";
 import DashBord from "./pages/DashBord.jsx";
 import Search from "./pages/Search.jsx";
 import Favorite from "./pages/Favorite.jsx";
-import Login from "./pages/login.jsx";
+import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 
 const App = () => {
@@ -61,7 +61,7 @@ const App = () => {
           <Frame>
             <NavBar toggle={MenuOpenClose} handleLogin={handleLogin} />
             <LoginDiv className={islogin ? "active" : ""}>
-              <Login handleLogin={handleLogin} />
+              <AuthForm handleLogin={handleLogin} />
             </LoginDiv>
             <LogOutDiv className={islogout ? "active" : ""}>
               <LogoutCard handleLogout={handleLogout} />
@@ -102,7 +102,7 @@ const Frame = styled.div`
 
 const LoginDiv = styled.div`
   z-index: 4;
-  position: fixed; 
+  position: fixed;
   top: 0px;
   left: 0;
   right: 0;
@@ -124,22 +124,22 @@ const LoginDiv = styled.div`
 
 const LogOutDiv = styled.div`
   z-index: 4;
-  position: fixed; 
+  position: fixed;
   top: 0px;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4); 
-  opacity: 0; 
-  pointer-events: none; 
-  transition: opacity 0.3s ease-in-out; 
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
 
   &.active {
     z-index: 5;
-    opacity: 1; 
-    pointer-events: auto; 
+    opacity: 1;
+    pointer-events: auto;
   }
 `;

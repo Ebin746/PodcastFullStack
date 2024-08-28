@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const genrateToken = require("../utils/genrateToken");
 
 const signup = async (req, res, next) => {
-  const { userName, email, password, imageUrl } = req.body;
+  const { userName, email, password } = req.body;
   try {
     let user = await UserSchema.findOne({ email });
 
@@ -17,14 +17,21 @@ const signup = async (req, res, next) => {
     user = await new UserSchema({
       userName,
       email,
-      password: hashedPassword,
-      imageUrl,
+      password: hashedPassword
     }).save();
     let token = genrateToken(user);
-    res
-      .status(201)
-      .headers("authorization", `Bearer ${token}`)
-      .json({ message: "successfully signup ", user, token });
+// In your signup/login controller
+res
+  .status(200)
+  .cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // true in production
+    sameSite: 'Strict',
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  })
+  .json({ message: 'Authentication successful', user });
+
+
   } catch (error) {
     next(error);
   }
@@ -33,7 +40,7 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { userName, password } = req.body;
-    const user = await UserSchema.findOne({ userName });
+    const user = await UserSchema.findOne({ userName }).select(-"password")
     if (!user) {
       return res
         .status(404)
@@ -44,10 +51,17 @@ const login = async (req, res, next) => {
       return res.status(404).json({ message: "not matching password" });
     }
     let token = genrateToken(user);
-    res
-      .status(200)
-      .headers("authorization", `Bearer ${token}`)
-      .json({ message: "succesfully login ", user, token });
+// In your signup/login controller
+res
+  .status(200)
+  .cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // true in production
+    sameSite: true,
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  })
+  .json({ message: 'Authentication successful', user });
+
   } catch (error) {
     next(error);
   }
