@@ -1,22 +1,40 @@
-
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PodcastCard from "../components/PodcastCard";
 import   axios from "axios";
 import {  useEffect ,useState} from "react";
+import axiosInstance from "../utils/axiosInstance";
 
 const DashBord =() => {
+  const UserDeatails=JSON.parse(localStorage.getItem('user'));
   const [podcastDetails,setPodcastDetails]=useState([]);
+  const [favPodcasts,setFavPodcasts]=useState([]);
   const fetchPosdcasts=async()=>{
 try {
-  let response=await axios.get("/api");
+  let response=await axios.get("/api/podcast");
   setPodcastDetails(response.data);
 } catch (error) {
   console.log(error);
 }
     }
+    const isFavorite=async ()=>{
+      try {
+        const res=await axiosInstance.get(`/user/fav/${UserDeatails._id}`);
+        let favId=res.data.map((item)=>{return item._id});
+        console.log(favId)
+        setFavPodcasts(favId);
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
    useEffect(()=>{
-fetchPosdcasts()  },[])
+fetchPosdcasts();
+isFavorite();
+  },[])
+
+
+
   return (
     <MainDashBoard>
       {podcastDetails.map((category, i) => (
@@ -36,6 +54,7 @@ fetchPosdcasts()  },[])
                 about={podcast.about}
                 creator={podcast.creator.name}
                 views={podcast.views}
+                state={favPodcasts.includes(podcast._id)}
               />
             ))}
           </PodCast>

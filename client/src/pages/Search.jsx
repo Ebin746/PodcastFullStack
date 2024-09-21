@@ -1,35 +1,84 @@
-import React from "react";
-import { styled, keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import { styled, keyframes } from "styled-components"; // Corrected import
 import SearchIcon from "@mui/icons-material/Search";
 import MicNoneRoundedIcon from "@mui/icons-material/MicNoneRounded";
 import { Category } from "../utils/Data";
-import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import axiosInstance from "../utils/axiosInstance";
+
 const Search = () => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]); // State for search results
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [error, setError] = useState(null); // State for error handling
+
+  const handleSearch = async () => {
+    if (!query.trim()) {
+      // Optional: Handle empty query
+      alert("Please enter a search term.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axiosInstance(
+        `/podcast/search?query=${encodeURIComponent(query)}&page=1,limit=10`
+      );
+      console.log(response);
+
+      setResults(response.data); // Assuming your backend sends { podcasts: [...] }
+    } catch (err) {
+      console.error("Search error:", err);
+      setError("Failed to fetch search results. Please try again.");
+    } finally{
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+  };
+
   return (
     <SearchContainer>
-      <p className="Heading"> Find your podcast</p>
+      <p className="Heading">Find your podcast</p>
       <BottomSearch>
         <SearchBar>
-          <SearchInput placeholder="Search Podcast" />
-          <SearchIcon className="search" />
+          <SearchInput
+            type="text"
+            placeholder="Search Podcast"
+            value={query}
+            onChange={handleInputChange}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+          />
+          <SearchIcon className="search" onClick={handleSearch} />
         </SearchBar>
-        {Category.map((e, i) => (
+       <SectionWrapper>
+        {loading&& <p>Loading...........</p>}
+        {error&&<p style={{backgroundColor:"red"}}>Error occured on Searching</p>}
+       {results.map((e, i) => (
           <HashLink
             key={i}
-            to={`/#${e.name.toLocaleLowerCase()}`}
+            to={`/#${e.title.toLocaleLowerCase()}`}
             style={{ textDecoration: "none" }}
           >
-            <Sections props={e.color}>
+            <Sections color={"green"}>
               <PodcastPic>
-                <img src={e.img} alt="pic" />
+                <img src="/images/podcast-neon-signs-style-text-free-vector.jpg" alt={e.title} />
               </PodcastPic>
               <PodcastTitle>
-                <p>{e.name}</p>
+                <p>{e.title}</p>
               </PodcastTitle>
             </Sections>
           </HashLink>
         ))}
+        {!loading&&!error&&results.length===0&& <p>NO DATA FOUND</p>}
+       </SectionWrapper>
       </BottomSearch>
     </SearchContainer>
   );
@@ -48,6 +97,7 @@ const gradientAnimation = keyframes`
     background-position: 0% 50%;
   }
 `;
+
 
 const SearchContainer = styled.div`
   display: flex;
@@ -87,6 +137,7 @@ const SearchContainer = styled.div`
     }
   }
 `;
+
 const SearchInput = styled.input`
   width: 50px;
   height: 50px;
@@ -140,31 +191,44 @@ const SearchBar = styled.div`
   align-items: center;
   justify-content: center;
 `;
-//Sections
-const Sections = styled.div`
-  border-radius: 1%;
-  height: 120px;
+//sections
+const SectionWrapper = styled.div`
   width: 100%;
-  background-color: ${({ props }) => props};
+  display: flex;
+  justify-content: space-evenly; // Align items to the start
+  flex-wrap: wrap; // Allow items to wrap
+  gap: 10px; // Add gap for spacing
+`;
+
+const Sections = styled.div`
+  border-radius: 10px; // Slightly rounded corners
+  height: 120px;
+  width: calc(100% - 10px); // Adjust width to allow for margin
+  background-color:violet;
   display: flex;
   flex-direction: row;
-  margin: 10px 0px 10px 10px;
-  padding-right: 10px;
+  margin: 10px 0;
+  padding: 10px; // Add padding for inner spacing
+
+  @media (max-width: 720px) {
+    width: calc(100% - 10px); // Full width on smaller screens
+  }
 `;
+
 const BottomSearch = styled.div`
   background-color: ${({ theme }) => theme.bg};
   display: flex;
   flex-direction: column;
 `;
 const PodcastPic = styled.div`
-  height: 100%;
-  width: 300px;
+  height: 100px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
 
   img {
-    width: 210px;
+    width: 100px;
     height: 110px;
     object-fit: fill;
     border: none;
@@ -186,9 +250,8 @@ const PodcastTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
   p {
-    font-size: 90px;
+    font-size: 60px;
     display: inline-block;
     font-weight: 600;
 

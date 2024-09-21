@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Podcast",
+      unique:true
     },
   ],
   uploads: [
@@ -25,5 +26,4 @@ const UserSchema = new mongoose.Schema({
     default: false,
   },
 });
-
 module.exports = mongoose.model("User", UserSchema);

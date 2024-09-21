@@ -1,3 +1,4 @@
+const { options } = require("../routers/user");
 const CategorySchema = require("../Schema/categorySchema");
 const PodcastSchema = require("../Schema/podcastSchema");
 
@@ -37,7 +38,6 @@ const addPodcast = async (req, res, next) => {
     next(error);
   }
 };
-
 const getPodcasts = async (req, res, next) => {
   try {
     let data = await CategorySchema.find().populate("podcasts").exec();
@@ -46,7 +46,6 @@ const getPodcasts = async (req, res, next) => {
     next(error);
   }
 };
-
 const getPodcast = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -87,10 +86,46 @@ const updatePodcast = async (req, res, next) => {
     next(error);
   }
 };
+const querySearch = async (req, res, next) => {
+  const { query, page = 1, limit = 10 } = req.query;
+  console.log(query);
+  try {
+    const result = await PodcastSchema.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { about: { $regex: query, $options: "i" } },
+      ],
+    })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .lean();
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const suggestions = async (req, res, next) => {
+  const { query, page = 1, limit = 10 } = req.query;
+  try {
+    const result = await PodcastSchema.find({
+      $or: [
+        { title: { regex: query, options: "i" } },
+        { about: { regex: query, options: "i" } },
+      ]
+    });
+    res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   addPodcast,
   getPodcasts,
   getPodcast,
   deletePodcast,
   updatePodcast,
+  querySearch,
+  suggestions
 };

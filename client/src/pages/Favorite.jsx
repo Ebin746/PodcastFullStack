@@ -1,18 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PodcastCard from '../components/PodcastCard'
 import styled from 'styled-components'
+import axiosInstance from '../utils/axiosInstance'
+import axios from 'axios'
 const Favorite = () => {
+  const userDetails=JSON.parse(localStorage.getItem('user'))
+  const userId=userDetails._id
+  const [favPodcast,setFavPodcast]=useState();
+const fetchFavorites=async()=>{
+try {
+  const res=await axiosInstance.get(`/user/fav/${userId}`);
+console.log(res)
+setFavPodcast(res.data);
+} catch (error) {
+  console.log(error);
+}
+}
+  useEffect(()=>{
+    fetchFavorites()
+  },[])
   return (
  <>
 <Filter>
 <PodCast>
-<PodcastCard
-          key={`podcast-${1}`} 
-          title="Sample Podcast Title" 
-          about="A short description about the podcast." 
-          creator="Sample Creator" 
-          views={1500}
-        />
+{favPodcast?.map((podcast, j) => (
+              <PodcastCard
+                key={j}
+                id={podcast._id}
+                title={podcast.title}
+                about={podcast.about}
+                creator={podcast.creator.name}
+                views={podcast.views}
+                state={true}
+              />
+            ))}
 </PodCast>
 </Filter>
  </>

@@ -24,9 +24,9 @@ app.use(cors({
 
 app.use(cookie_parser())
 app.use(express.json());
-app.use("/api", podcastRouter);
+app.use("/api/podcast", podcastRouter);
 app.use("/api", authRouter);
-app.use("/api", userRouter);
+app.use("/api/user", userRouter);
 app.use((error, req, res, next) => {
   let ErrorStatus = error.status || 500;
   let ErrorMessage = error.message || "some errors are detected";

@@ -2,19 +2,25 @@ import React, { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
-import axiosIntance from '../components/'
-const PodcastCard = ({ id,title, about, views, creator }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+import axiosIntance from "../utils/axiosInstance"
+const PodcastCard = ({ id,title, about, views, creator ,state}) => {
+  const [isFavorite, setIsFavorite] = useState(state||false);
   let Details=localStorage.getItem('user')
   const userDetails=JSON.parse(Details);
 
   const makeFavorite = async () => {
-
-    console.log(id,userDetails._id)
+    console.log(state);
+    const podcastId=id;
+    const userId=userDetails._id
     try {
-    const res=
+      let url=`/user/fav/${userId}/${podcastId}`;
+      if (isFavorite) {
+        await axiosIntance.delete(url);
+      } else {
+        await axiosIntance.post(url);
+      }
     } catch (error) {
-      
+console.log(error);      
     }
     setIsFavorite((e) => !e);
   };
