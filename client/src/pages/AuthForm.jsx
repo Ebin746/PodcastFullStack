@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axiosInstance from '../utils/axiosInstance';
 
-
-
-
 const AuthForm = ({ handleLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [userName, setUserName] = useState('');

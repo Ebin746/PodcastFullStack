@@ -11,6 +11,7 @@ const Search = () => {
   const [results, setResults] = useState([]); // State for search results
   const [loading, setLoading] = useState(false); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
+  const [suggestions, setSuggestions] = useState([]);
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -31,8 +32,25 @@ const Search = () => {
     } catch (err) {
       console.error("Search error:", err);
       setError("Failed to fetch search results. Please try again.");
-    } finally{
+    } finally {
       setLoading(false);
+    }
+  };
+//sugestion maker
+
+  const suggestionMaker = async () => {
+    if(query.trim()===""){
+      setSuggestions([]);
+      return ;
+    }
+    try {
+      const result = await axiosInstance.get(
+        `/podcast/suggestion?query=${encodeURIComponent(query)}&page=1,limit=10`
+      );
+    setSuggestions(result.data);
+      console.log(suggestions);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -58,27 +76,32 @@ const Search = () => {
           />
           <SearchIcon className="search" onClick={handleSearch} />
         </SearchBar>
-       <SectionWrapper>
-        {loading&& <p>Loading...........</p>}
-        {error&&<p style={{backgroundColor:"red"}}>Error occured on Searching</p>}
-       {results.map((e, i) => (
-          <HashLink
-            key={i}
-            to={`/#${e.title.toLocaleLowerCase()}`}
-            style={{ textDecoration: "none" }}
-          >
-            <Sections color={"green"}>
-              <PodcastPic>
-                <img src="/images/podcast-neon-signs-style-text-free-vector.jpg" alt={e.title} />
-              </PodcastPic>
-              <PodcastTitle>
-                <p>{e.title}</p>
-              </PodcastTitle>
-            </Sections>
-          </HashLink>
-        ))}
-        {!loading&&!error&&results.length===0&& <p>NO DATA FOUND</p>}
-       </SectionWrapper>
+        <SectionWrapper>
+          {loading && <p>Loading...........</p>}
+          {error && (
+            <p style={{ backgroundColor: "red" }}>Error occured on Searching</p>
+          )}
+          {results.map((e, i) => (
+            <HashLink
+              key={i}
+              to={`/#${e.title.toLocaleLowerCase()}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Sections color={"green"}>
+                <PodcastPic>
+                  <img
+                    src="/images/podcast-neon-signs-style-text-free-vector.jpg"
+                    alt={e.title}
+                  />
+                </PodcastPic>
+                <PodcastTitle>
+                  <p>{e.title}</p>
+                </PodcastTitle>
+              </Sections>
+            </HashLink>
+          ))}
+          {!loading && !error && results.length === 0 && <p>NO DATA FOUND</p>}
+        </SectionWrapper>
       </BottomSearch>
     </SearchContainer>
   );
@@ -97,7 +120,6 @@ const gradientAnimation = keyframes`
     background-position: 0% 50%;
   }
 `;
-
 
 const SearchContainer = styled.div`
   display: flex;
@@ -204,7 +226,7 @@ const Sections = styled.div`
   border-radius: 10px; // Slightly rounded corners
   height: 120px;
   width: calc(100% - 10px); // Adjust width to allow for margin
-  background-color:violet;
+  background-color: violet;
   display: flex;
   flex-direction: row;
   margin: 10px 0;
