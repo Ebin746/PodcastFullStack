@@ -5,6 +5,8 @@ import MicNoneRoundedIcon from "@mui/icons-material/MicNoneRounded";
 import { Category } from "../utils/Data";
 import { HashLink } from "react-router-hash-link";
 import axiosInstance from "../utils/axiosInstance";
+import debounce from "lodash/debounce";
+import { assign } from "lodash";
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -24,40 +26,65 @@ const Search = () => {
     setError(null);
     try {
       const response = await axiosInstance(
-        `/podcast/search?query=${encodeURIComponent(query)}&page=1,limit=10`
+        `/podcast/search?query=${encodeURIComponent(query.trim())}&page=1,limit=10`
       );
       console.log(response);
 
-      setResults(response.data); // Assuming your backend sends { podcasts: [...] }
+      setResults(response.data); 
+  
     } catch (err) {
       console.error("Search error:", err);
       setError("Failed to fetch search results. Please try again.");
     } finally {
       setLoading(false);
+      setQuery('')
+      setSuggestions([])
+  
     }
   };
-//sugestion maker
-
-  const suggestionMaker = async () => {
-    if(query.trim()===""){
-      setSuggestions([]);
-      return ;
-    }
+  //sugestion maker
+  const fetchSuggestions = async () => {
     try {
       const result = await axiosInstance.get(
-        `/podcast/suggestion?query=${encodeURIComponent(query)}&page=1,limit=10`
+        `/podcast/suggestions?query=${encodeURIComponent(query)}&limit=10`
       );
-    setSuggestions(result.data);
-      console.log(suggestions);
+      // Assuming result.data is an array of objects
+      const objects = result.data.results;
+      console.log(objects)
+      setSuggestions(
+            objects.map((item) => ({ id: item._id, name: item.title })),
+      );
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching suggestions", error);
     }
   };
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setSuggestions([]);
+      return;
+    }
+
+    const debouncedFetchSuggestions = debounce(fetchSuggestions, 1000);
+
+    debouncedFetchSuggestions();
+
+    // Cleanup function to cancel the debounce in case of component unmount or query change
+    return () => {
+      debouncedFetchSuggestions.cancel(); // Cleanup to avoid multiple requests
+    };
+  }, [query]); // Only re-run when 'query' changes
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
+  const handleSuggestionClick = (suggestion, e) => {
+    e.preventDefault(); // Corrected the typo here
+    setQuery(suggestion.name);
+    handleSearch()
 
+    console.log(suggestion);
+  };
   return (
     <SearchContainer>
       <p className="Heading">Find your podcast</p>
@@ -76,6 +103,15 @@ const Search = () => {
           />
           <SearchIcon className="search" onClick={handleSearch} />
         </SearchBar>
+
+        <SuggestionsContainer>
+  {suggestions.length!==0&&suggestions?.map((suggestion) => (
+    <SuggestionItem key={suggestion.id} onClick={(e)=>handleSuggestionClick(suggestion,e)}>
+      <SuggestionText >{suggestion.name} </SuggestionText>
+    </SuggestionItem>
+  ))}
+</SuggestionsContainer>
+
         <SectionWrapper>
           {loading && <p>Loading...........</p>}
           {error && (
@@ -84,7 +120,7 @@ const Search = () => {
           {results.map((e, i) => (
             <HashLink
               key={i}
-              to={`/#${e.title.toLocaleLowerCase()}`}
+              to={`/#${e.title.toLowerCase()}`}
               style={{ textDecoration: "none" }}
             >
               <Sections color={"green"}>
@@ -108,6 +144,43 @@ const Search = () => {
 };
 
 export default Search;
+
+
+
+const SuggestionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+`;
+
+const SuggestionItem = styled.div`
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const SuggestionText = styled.p`
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+`;
+
+
 
 const gradientAnimation = keyframes`
   0% {

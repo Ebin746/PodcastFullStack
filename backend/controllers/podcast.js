@@ -108,18 +108,44 @@ const querySearch = async (req, res, next) => {
 
 const suggestions = async (req, res, next) => {
   const { query, page = 1, limit = 10 } = req.query;
+
+  // Ensure the query parameter is provided
+  console.log(query);
+  if (!query) {
+    return res.status(400).json({ message: "Query parameter is required" });
+  }
+
   try {
-    const result = await PodcastSchema.find({
+    // Search podcasts by title or about fields using regex
+    const searchQuery = {
       $or: [
-        { title: { regex: query, options: "i" } },
-        { about: { regex: query, options: "i" } },
-      ]
+        { title: { $regex: query, $options: "i" } },
+        { about: { $regex: query, $options: "i" } },
+      ],
+    };
+
+    // Count total results for pagination
+    const totalResults = await PodcastSchema.countDocuments(searchQuery)
+
+    // Find matching podcasts with pagination
+    const results = await PodcastSchema.find(searchQuery)
+      .select('title')
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .limit(parseInt(limit))
+      .lean(); // Lean query for performance
+
+    // Return results along with pagination metadata
+    res.status(200).json({
+      results,
+      totalResults,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalResults / limit),
     });
-    res.status(200).json({ result });
   } catch (error) {
     next(error);
   }
 };
+
 module.exports = {
   addPodcast,
   getPodcasts,
@@ -127,5 +153,5 @@ module.exports = {
   deletePodcast,
   updatePodcast,
   querySearch,
-  suggestions
+  suggestions,
 };

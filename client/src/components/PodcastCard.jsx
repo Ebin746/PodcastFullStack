@@ -13,7 +13,7 @@ const PodcastCard = ({ id,title, about, views, creator ,state}) => {
     const podcastId=id;
     const userId=userDetails._id
     try {
-      let url=`/user/fav/${userId}/${podcastId}`;
+      let url=`/user/fav/${userId}/${podcastIcd}`;
       if (isFavorite) {
         await axiosIntance.delete(url);
       } else {
