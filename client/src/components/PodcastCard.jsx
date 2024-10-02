@@ -1,29 +1,36 @@
 import React, { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"; // Import Play Icon
 import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
-import axiosIntance from "../utils/axiosInstance"
-const PodcastCard = ({ id,title, about, views, creator ,state}) => {
-  const [isFavorite, setIsFavorite] = useState(state||false);
-  let Details=localStorage.getItem('user')
-  const userDetails=JSON.parse(Details);
+import axiosIntance from "../utils/axiosInstance";
+
+const PodcastCard = ({ id, title, about, views, creator, state }) => {
+  const [isFavorite, setIsFavorite] = useState(state || false);
+  let Details = localStorage.getItem('user');
+  const userDetails = JSON.parse(Details);
 
   const makeFavorite = async () => {
-    console.log(state);
-    const podcastId=id;
-    const userId=userDetails._id
+    const podcastId = id;
+    const userId = userDetails._id;
     try {
-      let url=`/user/fav/${userId}/${podcastIcd}`;
+      let url = `/user/fav/${userId}/${podcastId}`; // Fixed typo in variable name
       if (isFavorite) {
         await axiosIntance.delete(url);
       } else {
         await axiosIntance.post(url);
       }
     } catch (error) {
-console.log(error);      
+      console.log(error);
     }
     setIsFavorite((e) => !e);
   };
+
+  // Function to handle play button click
+  const handlePlayClick = () => {
+    console.log(`Playing podcast: ${title}`);
+  };
+
   return (
     <Card>
       <Top>
@@ -33,6 +40,9 @@ console.log(error);
           isFavorite={isFavorite}
         />
         <CardImage src={images} />
+        <PlayButtonStyled onClick={handlePlayClick}>
+        <PlayArrowIconStyled ><PlayArrowIcon /></PlayArrowIconStyled>
+        </PlayButtonStyled>
       </Top>
       <CardDetails>
         <MainInfo>
@@ -52,6 +62,8 @@ console.log(error);
 };
 
 export default PodcastCard;
+
+// Styled components
 
 const Card = styled.div`
   margin-top: 20px;
@@ -144,6 +156,7 @@ const CardImage = styled.img`
   display: block;
   transition: filter 0.3s ease-in-out;
 `;
+
 const FavoriteIconStyled = styled(FavoriteIcon)`
   position: absolute;
   right: 8px;
@@ -164,3 +177,59 @@ const FavoriteIconStyled = styled(FavoriteIcon)`
     transform: scale(1.3); /* Scale down when clicked */
   }
 `;
+
+const PlayButtonStyled = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 10px; /* Increased padding for better hit area */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease;
+
+  /* Show on hover */
+  ${Card}:hover & {
+    opacity: 1;
+  }
+
+  @keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.2);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+}
+
+`;
+
+const PlayArrowIconStyled = styled(PlayArrowIcon)`
+  color: #f8f8f8; /* Change play icon color */
+  font-size: 60px; /* Increase icon size */
+  animation: bounce 1.2s infinite; /* Add bouncing animation */
+  display: flex; /* Use flexbox to center the icon */
+  align-items: center; /* Align items vertically */
+  justify-content: center; /* Align items horizontally */
+  height: 100%; /* Ensure it takes full height of parent */
+  width: 100%; /* Ensure it takes full width of parent */
+  @keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.2);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+}
+
+`;
+
+
+
