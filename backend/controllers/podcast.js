@@ -5,8 +5,9 @@ const PodcastSchema = require("../Schema/podcastSchema");
 const addPodcast = async (req, res, next) => {
   let categoryData;
   try {
-    const { name, podcast } = req.body;
+    const { name, podcast } = req.body; //name means category
     const { title, about, creator, views, imageUrl } = podcast;
+    console.log(req.AudioId);
     let podcastData = await new PodcastSchema({
       title,
       about,
@@ -16,6 +17,7 @@ const addPodcast = async (req, res, next) => {
       },
       views,
       imageUrl,
+      src: req.AudioId,
     }).save();
     try {
       categoryData = await CategorySchema.findOne({ name });
@@ -40,7 +42,9 @@ const addPodcast = async (req, res, next) => {
 };
 const getPodcasts = async (req, res, next) => {
   try {
-    let data = await CategorySchema.find().populate("podcasts").exec();
+    let data = await CategorySchema.find()
+      .populate({ path: "podcasts", populate: { path: "src", model: "audio" } })
+      .exec();
     res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -49,7 +53,7 @@ const getPodcasts = async (req, res, next) => {
 const getPodcast = async (req, res, next) => {
   try {
     const id = req.params.id;
-    let data = await PodcastSchema.findById(id);
+    let data = await PodcastSchema.findById(id).populate('src');
     if (!data) {
       res.status(404).json({ message: "podcast Not Found" });
     }
@@ -125,11 +129,11 @@ const suggestions = async (req, res, next) => {
     };
 
     // Count total results for pagination
-    const totalResults = await PodcastSchema.countDocuments(searchQuery)
+    const totalResults = await PodcastSchema.countDocuments(searchQuery);
 
     // Find matching podcasts with pagination
     const results = await PodcastSchema.find(searchQuery)
-      .select('title')
+      .select("title")
       .skip((parseInt(page) - 1) * parseInt(limit))
       .limit(parseInt(limit))
       .lean(); // Lean query for performance
