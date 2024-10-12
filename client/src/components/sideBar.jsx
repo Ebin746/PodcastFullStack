@@ -19,29 +19,6 @@ const SideBar = ({
   setDarkMod,
   handleLogout,
 }) => {
-  const request = async (formdata) => {
-    try {
-      const req = await axios.post("/api/uploads", formdata, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(req.data);
-    } catch (error) {
-      console.error("Upload error:", error.response?.data || error.message);
-    }
-  };
-
-  const fileHandle = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formdata = new FormData();
-    formdata.append("file", file);
-
-    request(formdata);
-    console.log("Uploading file:", file);
-  };
 
   const Menuitems = [
     {
@@ -53,6 +30,10 @@ const SideBar = ({
       link: "/search",
       name: "Search",
       icon: <SearchIcon />,
+    },   {
+      link: "/upload",
+      name: "UPLOad",
+      icon: <SearchIcon />,
     },
     {
       link: "/favorite",
@@ -61,23 +42,7 @@ const SideBar = ({
     },
   ];
   const buttons = [
-    {
-      fun: () => {},
-      name: (
-        <label htmlFor={"upload"}>
-          {" "}
-          <input
-            id="upload"
-            type="file"
-            placeholder="Upload"
-            style={{ display: "none" }}
-            onChange={fileHandle}
-          />
-          Upload
-        </label>
-      ),
-      icon: <CloudUploadRoundedIcon />,
-    },
+    
     {
       fun: () => setDarkMod((darkMod) => !darkMod),
       name: darkMod ? "Dark mod " : "Light Mod",

@@ -13,6 +13,7 @@ const DashBord =() => {
 try {
   let response=await axios.get("/api/podcast");
   setPodcastDetails(response.data);
+  console.log(response.data)
 } catch (error) {
   console.log(error);
 }
@@ -37,7 +38,7 @@ isFavorite();
 
   return (
     <MainDashBoard>
-      {podcastDetails.map((category, i) => (
+      {podcastDetails?.map((category, i) => (
         <Filter key={i} id={category._id}>
           <Topic>
             {category.name.toLocaleUpperCase()}
@@ -46,7 +47,7 @@ isFavorite();
             </Link>
           </Topic>
           <PodCast>
-            {category.podcasts.map((podcast, j) => (
+            {category?.podcasts?.map((podcast, j) => (
               <PodcastCard
                 key={j}
                 id={podcast._id}

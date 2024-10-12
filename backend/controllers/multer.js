@@ -1,4 +1,4 @@
-const uploadSchema=require("../Schema/upload")
+
 const fileUpload =async (req, res, next) => {
     try {
       if(!req.file){ 
@@ -6,12 +6,12 @@ const fileUpload =async (req, res, next) => {
       }
       console.log(req.file);
       const { filename, path, originalname } = req.file;
-      const data = new uploadSchema({
+      const audioData ={
         filename: filename,
         path: path,
         originalname: originalname,
-      });
-      await data.save();
+      };
+      req.audioData=audioData;
       res.status(200).json({ message: "The file has been stored" });
     } catch (error) {
       next(error);

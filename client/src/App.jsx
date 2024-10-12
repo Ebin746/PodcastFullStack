@@ -9,6 +9,7 @@ import Search from "./pages/Search.jsx";
 import Favorite from "./pages/Favorite.jsx";
 import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
+import PodcastUpload from "./components/PodcastUpload.jsx";
 
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
@@ -58,6 +59,7 @@ const App = () => {
                   <DashBord islogin={islogin} handleLogin={handleLogin} />
                 }
               />
+              <Route path="/upload" element={<PodcastUpload/>}/>
               <Route path="/search" element={<Search />} />
               <Route path="/favorite" element={<Favorite />} />
             </Routes>

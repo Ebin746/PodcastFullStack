@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
+const fileStorage = new mongoose.Schema({
+  filename: String,
+  path: String,
+  originalname: String,
+});
+
 const PodcastSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    trim: true,
   },
   about: {
     type: String,
@@ -27,5 +34,6 @@ const PodcastSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  src: fileStorage ,
 });
 module.exports = mongoose.model("Podcast", PodcastSchema);
