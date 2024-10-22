@@ -53,7 +53,7 @@ isFavorite();
                 id={podcast._id}
                 title={podcast.title}
                 about={podcast.about}
-                creator={podcast.creator.name}
+                creator={podcast.creator?.name}
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
               />

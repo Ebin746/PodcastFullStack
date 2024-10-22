@@ -12,7 +12,7 @@ const {
 const { verifyToken } = require("../middlewares/jwtVerify.middleware");
 const { upload } = require("../middlewares/multer.middleware");
 
-router.post("/uploads", upload.single("file"), fileUpload);
+router.post("/uploads", upload.single("file"), fileUpload,addPodcast);
 router.get("/search",querySearch);
 router.get("/suggestions",suggestions)
 router.post("/",addPodcast);

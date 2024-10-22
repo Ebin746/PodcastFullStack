@@ -1,3 +1,4 @@
+const { json } = require("express");
 const { options } = require("../routers/user");
 const CategorySchema = require("../Schema/categorySchema");
 const PodcastSchema = require("../Schema/podcastSchema");
@@ -5,10 +6,12 @@ const PodcastSchema = require("../Schema/podcastSchema");
 const addPodcast = async (req, res, next) => {
   let categoryData;
   try {
-    const { name, podcast } = req.body;
-    const { title, about, creator, views, imageUrl } = podcast;
+    const { name} = req.body;
+    const podcast=JSON.parse(req.body.podcast);
+    const { title, about, creator, views, imageUrl } =podcast;
+    
     const { filename, path, originalname } = req.audioData;
-    console.log(req.audioData);
+    console.log(name,podcast,"frome here");
     let podcastData = await new PodcastSchema({
       title,
       about,
@@ -43,7 +46,7 @@ const addPodcast = async (req, res, next) => {
 };
 const getPodcasts = async (req, res, next) => {
   try {
-    let data = await CategorySchema.find().exec();
+    let data = await CategorySchema.find().populate('podcasts').exec();
 
     res.status(200).json(data);
   } catch (error) {

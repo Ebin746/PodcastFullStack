@@ -12,7 +12,7 @@ const fileUpload =async (req, res, next) => {
         originalname: originalname,
       };
       req.audioData=audioData;
-      res.status(200).json({ message: "The file has been stored" });
+    next();
     } catch (error) {
       next(error);
     }

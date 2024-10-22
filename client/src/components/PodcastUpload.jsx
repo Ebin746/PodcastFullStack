@@ -12,8 +12,8 @@ const UploadContainer = styled.div`
   border-radius: 10px;
   width: 50%;
   margin: 20px auto;
-  max-height: 600px; /* Set a max height */
-  overflow-y: auto; /* Enable vertical scroll */
+  max-height: 600px;
+  overflow-y: auto;
 `;
 
 const Title = styled.h2`
@@ -61,8 +61,8 @@ const ErrorMessage = styled.div`
   margin-top: 10px;
 `;
 
-// Main component
 const PodcastUpload = () => {
+  const [category,setCategory]=useState("")
   const [podcast, setPodcast] = useState({
     title: "",
     about: "",
@@ -90,10 +90,23 @@ const PodcastUpload = () => {
 
     const formData = new FormData();
     formData.append("file", audioFile);
-    formData.append("podcast", JSON.stringify(podcast));
+    formData.append("name",category)
+    formData.append(
+      "podcast",
+      JSON.stringify({
+        title: podcast.title,
+        about: podcast.about,
+        creator: {
+          name: podcast.creatorName,
+          avatar: podcast.creatorAvatar,
+        },
+        views: podcast.views,
+        imageUrl: podcast.imageUrl,
+      })
+    );
 
     try {
-      const response = await axios.post("/api/podcast/upload", formData, {
+      const response = await axios.post("/api/podcast/uploads", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -120,6 +133,14 @@ const PodcastUpload = () => {
     <UploadContainer>
       <Title>Upload Podcast</Title>
       <Form onSubmit={handleSubmit}>
+      <Label>category</Label>
+        <Input
+          type="text"
+          name="title"
+          value={category}
+          onChange={(e)=>{setCategory(e.target.value)}}
+          required
+        />
         <Label>Title</Label>
         <Input
           type="text"
