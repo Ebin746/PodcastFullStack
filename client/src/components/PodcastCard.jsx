@@ -1,34 +1,72 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"; // Import Play Icon
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 
-const PodcastCard = ({ id, title, about, views, creator, state }) => {
+const PodcastCard = ({ id, title, about, views, creator, state, audioSrc }) => {
   const [isFavorite, setIsFavorite] = useState(state || false);
-  let Details = localStorage.getItem('user');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  let Details = localStorage.getItem("user");
   const userDetails = JSON.parse(Details);
 
   const makeFavorite = async () => {
     const podcastId = id;
     const userId = userDetails._id;
     try {
-      let url = `/user/fav/${userId}/${podcastId}`; // Fixed typo in variable name
+      let url = `/user/fav/${userId}/${podcastId}`;
       if (isFavorite) {
         await axiosIntance.delete(url);
       } else {
         await axiosIntance.post(url);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error updating favorite status:", error);
     }
     setIsFavorite((e) => !e);
   };
+  
+  const handlePlayRestart = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((error) => {
+        throw new Error("error", error);
+      });
+    }
+  };
 
-  // Function to handle play button click
+  const handlePlaySkip = (direction) => {
+    if (audioRef.current) {
+      const currentTime = audioRef.current.currentTime;
+      const newTime = direction === "L" ? currentTime - 5 : currentTime + 5;
+      if (newTime > 0 && newTime <= audioRef.current.duration) {
+        audioRef.current.currentTime = newTime;
+        audioRef.current.play().catch((err) => {
+          console.log(err);
+        });
+      }
+    }
+  };
   const handlePlayClick = () => {
-    console.log(`Playing podcast: ${title}`);
+    try {
+      console.log("Audio source:", audioSrc);
+      if (audioRef.current) {
+        if (isPlaying) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          audioRef.current.play().catch((error) => {
+            console.error("Playback error:", error);
+          });
+          setIsPlaying(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error in handlePlayClick:", error);
+    }
   };
 
   return (
@@ -40,8 +78,10 @@ const PodcastCard = ({ id, title, about, views, creator, state }) => {
           isFavorite={isFavorite}
         />
         <CardImage src={images} />
-        <PlayButtonStyled onClick={handlePlayClick}>
-        <PlayArrowIconStyled ><PlayArrowIcon /></PlayArrowIconStyled>
+        <PlayButtonStyled onClick={handlePlayClick} isPlaying={isPlaying}>
+          <PlayArrowIconStyled isPlaying={isPlaying}>
+            <PlayArrowIcon />
+          </PlayArrowIconStyled>
         </PlayButtonStyled>
       </Top>
       <CardDetails>
@@ -57,6 +97,7 @@ const PodcastCard = ({ id, title, about, views, creator, state }) => {
           </CreatorsInfo>
         </MainInfo>
       </CardDetails>
+      <audio ref={audioRef} src={audioSrc} controls />
     </Card>
   );
 };
@@ -194,42 +235,32 @@ const PlayButtonStyled = styled.div`
     opacity: 1;
   }
 
-  @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.2);
-  }
-  60% {
-    transform: scale(1.1);
-  }
-}
+  /* Scale up when playing */
+  ${({ isPlaying }) =>
+    isPlaying &&
+    `opacity:1;
+    animation: pulse 0.5s infinite;
+  `}
 
+  @keyframes pulse {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
 `;
 
 const PlayArrowIconStyled = styled(PlayArrowIcon)`
   color: #f8f8f8; /* Change play icon color */
   font-size: 60px; /* Increase icon size */
-  animation: bounce 1.2s infinite; /* Add bouncing animation */
   display: flex; /* Use flexbox to center the icon */
   align-items: center; /* Align items vertically */
   justify-content: center; /* Align items horizontally */
   height: 100%; /* Ensure it takes full height of parent */
   width: 100%; /* Ensure it takes full width of parent */
-  @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.2);
-  }
-  60% {
-    transform: scale(1.1);
-  }
-}
-
 `;
-
-
-

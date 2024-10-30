@@ -56,6 +56,7 @@ isFavorite();
                 creator={podcast.creator?.name}
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
+                audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
             ))}
           </PodCast>
