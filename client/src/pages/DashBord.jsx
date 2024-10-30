@@ -1,40 +1,53 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PodcastCard from "../components/PodcastCard";
-import   axios from "axios";
-import {  useEffect ,useState} from "react";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
-const DashBord =() => {
-  const UserDeatails=JSON.parse(localStorage.getItem('user'));
-  const [podcastDetails,setPodcastDetails]=useState([]);
-  const [favPodcasts,setFavPodcasts]=useState([]);
-  const fetchPosdcasts=async()=>{
-try {
-  let response=await axios.get("/api/podcast");
-  setPodcastDetails(response.data);
-  console.log(response.data)
-} catch (error) {
-  console.log(error);
-}
+const DashBord = () => {
+  const UserDetails = JSON.parse(localStorage.getItem("user"));
+  const [podcastDetails, setPodcastDetails] = useState([]);
+  const [favPodcasts, setFavPodcasts] = useState([]);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
+  const audioRef = useRef(new Audio());
+  const fetchPodcasts = async () => {
+    try {
+      let response = await axios.get("/api/podcast");
+      setPodcastDetails(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
     }
-    const isFavorite=async ()=>{
-      try {
-        const res=await axiosInstance.get(`/user/fav/${UserDeatails._id}`);
-        let favId=res.data.map((item)=>{return item._id});
-        console.log(favId)
-        setFavPodcasts(favId);
-      } catch (error) {
-        console.log(error);
-      }
-    
+  };
+
+  const isFavorite = async () => {
+    try {
+      const res = await axiosInstance.get(`/user/fav/${UserDetails._id}`);
+      let favId = res.data.map((item) => item._id);
+      console.log(favId);
+      setFavPodcasts(favId);
+    } catch (error) {
+      console.log(error);
     }
-   useEffect(()=>{
-fetchPosdcasts();
-isFavorite();
-  },[])
+  };
 
+  useEffect(() => {
+    fetchPodcasts();
+    isFavorite();
+  }, []);
 
+  const handlePlay = (id, audioSrc) => {
+    console.log(audioSrc)
+    if (currentlyPlaying === id) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.pause();
+      audioRef.current.src = audioSrc;
+      audioRef.current.play();
+      setCurrentlyPlaying(id);
+    }
+  };
 
   return (
     <MainDashBoard>
@@ -56,6 +69,8 @@ isFavorite();
                 creator={podcast.creator?.name}
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
+                onPlay={handlePlay}
+                isPlaying={currentlyPlaying === podcast._id} // Corrected here
                 audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
             ))}
@@ -75,7 +90,6 @@ const MainDashBoard = styled.div`
   padding: 10px 20px;
   padding-bottom: 200px;
   height: 100%;
-  flex-direction: scroll;
   gap: 10px;
   overflow-y: scroll;
   @media (max-width: 720px) {
@@ -83,6 +97,7 @@ const MainDashBoard = styled.div`
     margin: 8px;
   }
 `;
+
 const Topic = styled.div`
   font-weight: bold;
   display: flex;
@@ -110,7 +125,6 @@ const Filter = styled.div`
   background-color: ${({ theme }) => theme.bg};
   border: none;
   border-radius: 5px;
-
   padding: 6px;
   font-size: 15px;
   color: ${({ theme }) => theme.text_primary};

@@ -5,10 +5,8 @@ import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 
-const PodcastCard = ({ id, title, about, views, creator, state, audioSrc }) => {
+const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay}) => {
   const [isFavorite, setIsFavorite] = useState(state || false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
 
   let Details = localStorage.getItem("user");
   const userDetails = JSON.parse(Details);
@@ -29,45 +27,30 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc }) => {
     setIsFavorite((e) => !e);
   };
   
-  const handlePlayRestart = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch((error) => {
-        throw new Error("error", error);
-      });
-    }
-  };
+  // const handlePlayRestart = () => {
+  //   if (audioRef.current) {
+  //     audioRef.current.currentTime = 0;
+  //     audioRef.current.play().catch((error) => {
+  //       throw new Error("error", error);
+  //     });
+  //   }
+  // };
 
-  const handlePlaySkip = (direction) => {
-    if (audioRef.current) {
-      const currentTime = audioRef.current.currentTime;
-      const newTime = direction === "L" ? currentTime - 5 : currentTime + 5;
-      if (newTime > 0 && newTime <= audioRef.current.duration) {
-        audioRef.current.currentTime = newTime;
-        audioRef.current.play().catch((err) => {
-          console.log(err);
-        });
-      }
-    }
-  };
+  // const handlePlaySkip = (direction) => {
+  //   if (audioRef.current) {
+  //     const currentTime = audioRef.current.currentTime;
+  //     const newTime = direction === "L" ? currentTime - 5 : currentTime + 5;
+  //     if (newTime > 0 && newTime <= audioRef.current.duration) {
+  //       audioRef.current.currentTime = newTime;
+  //       audioRef.current.play().catch((err) => {
+  //         console.log(err);
+  //       });
+  //     }
+  //   }
+  // };
   const handlePlayClick = () => {
-    try {
-      console.log("Audio source:", audioSrc);
-      if (audioRef.current) {
-        if (isPlaying) {
-          audioRef.current.pause();
-          setIsPlaying(false);
-        } else {
-          audioRef.current.play().catch((error) => {
-            console.error("Playback error:", error);
-          });
-          setIsPlaying(true);
-        }
-      }
-    } catch (error) {
-      console.error("Error in handlePlayClick:", error);
-    }
-  };
+    onPlay(id,audioSrc)
+     };
 
   return (
     <Card>
@@ -97,7 +80,6 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc }) => {
           </CreatorsInfo>
         </MainInfo>
       </CardDetails>
-      <audio ref={audioRef} src={audioSrc} controls />
     </Card>
   );
 };
