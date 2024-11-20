@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import PodcastCard from '../components/PodcastCard'
 import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
+import { useAudio } from '../context/audioContext'
 const Favorite = () => {
+  const {isPlaying,audioPlay}=useAudio();
   const userDetails=JSON.parse(localStorage.getItem('user'))
   const userId=userDetails._id
   const [favPodcast,setFavPodcast]=useState();
 const fetchFavorites=async()=>{
+
 try {
   const res=await axiosInstance.get(`/user/fav/${userId}`);
-console.log(res)
+console.warn(res.data )
 setFavPodcast(res.data);
 } catch (error) {
   console.log(error);
@@ -22,7 +25,8 @@ setFavPodcast(res.data);
  <>
 <Filter>
 <PodCast>
-{favPodcast?.map((podcast, j) => (
+{favPodcast? (
+            favPodcast?.map((podcast, j) => (
               <PodcastCard
                 key={j}
                 id={podcast._id}
@@ -31,8 +35,14 @@ setFavPodcast(res.data);
                 creator={podcast.creator.name}
                 views={podcast.views}
                 state={true}
+                onPlay={audioPlay}
+                isPlaying={isPlaying}
+                audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
-            ))}
+            ))
+          ) : (
+            <p>No favorites found.</p> // Message when no favorites exist
+          )}
 </PodCast>
 </Filter>
  </>

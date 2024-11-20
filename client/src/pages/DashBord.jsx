@@ -4,13 +4,13 @@ import PodcastCard from "../components/PodcastCard";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
+import { useAudio } from "../context/audioContext";
 const DashBord = () => {
   const UserDetails = JSON.parse(localStorage.getItem("user"));
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
-  const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
-  const [isPlaying, setIsPlaying] = useState( false);
-  const audioRef = useRef(new Audio());
+  const {isPlaying,audioPlay}=useAudio();
+  
   const fetchPodcasts = async () => {
     try {
       let response = await axios.get("/api/podcast");
@@ -27,6 +27,7 @@ const DashBord = () => {
       let favId = res.data.map((item) => item._id);
       console.log(favId);
       setFavPodcasts(favId);
+      
     } catch (error) {
       console.log(error);
     }
@@ -37,17 +38,17 @@ const DashBord = () => {
     isFavorite();
   }, []);
 
-  const handlePlay = (id, audioSrc) => {
-    console.log(audioSrc)
-    if (currentlyPlaying === id) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.pause();
-      audioRef.current.src = audioSrc;
-      audioRef.current.play();
-      setCurrentlyPlaying(id);
-    }
-  };
+  
+  //   console.log(audioSrc)
+  //   if (currentlyPlaying === id) {
+  //     audioRef.current.pause();
+  //   } else {
+  //     audioRef.current.pause();
+  //     audioRef.current.src = audioSrc;
+  //     audioRef.current.play();
+  //     setCurrentlyPlaying(id);
+  //   }
+  // };
 
   return (
     <MainDashBoard>
@@ -69,8 +70,8 @@ const DashBord = () => {
                 creator={podcast.creator?.name}
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
-                onPlay={handlePlay}
-                isPlaying={currentlyPlaying === podcast._id} 
+                onPlay={audioPlay}
+                isPlaying={isPlaying} 
                 audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
             ))}

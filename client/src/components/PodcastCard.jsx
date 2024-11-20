@@ -6,7 +6,7 @@ import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 
 const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay}) => {
-  const [isFavorite, setIsFavorite] = useState(state || false);
+  const [isFavorite, setIsFavorite] = useState(state);
   
   let Details = localStorage.getItem("user");
   const userDetails = JSON.parse(Details);
