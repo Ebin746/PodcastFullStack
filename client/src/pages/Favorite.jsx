@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PodcastCard from '../components/PodcastCard'
 import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
-import axios from 'axios'
 const Favorite = () => {
   const userDetails=JSON.parse(localStorage.getItem('user'))
   const userId=userDetails._id

@@ -7,7 +7,7 @@ import axiosIntance from "../utils/axiosInstance";
 
 const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay}) => {
   const [isFavorite, setIsFavorite] = useState(state || false);
-
+  
   let Details = localStorage.getItem("user");
   const userDetails = JSON.parse(Details);
 
@@ -27,29 +27,8 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlayi
     setIsFavorite((e) => !e);
   };
   
-  // const handlePlayRestart = () => {
-  //   if (audioRef.current) {
-  //     audioRef.current.currentTime = 0;
-  //     audioRef.current.play().catch((error) => {
-  //       throw new Error("error", error);
-  //     });
-  //   }
-  // };
-
-  // const handlePlaySkip = (direction) => {
-  //   if (audioRef.current) {
-  //     const currentTime = audioRef.current.currentTime;
-  //     const newTime = direction === "L" ? currentTime - 5 : currentTime + 5;
-  //     if (newTime > 0 && newTime <= audioRef.current.duration) {
-  //       audioRef.current.currentTime = newTime;
-  //       audioRef.current.play().catch((err) => {
-  //         console.log(err);
-  //       });
-  //     }
-  //   }
-  // };
   const handlePlayClick = () => {
-    onPlay(id,audioSrc)
+    onPlay(id,audioSrc);
      };
 
   return (

@@ -10,7 +10,6 @@ import Favorite from "./pages/Favorite.jsx";
 import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 import PodcastUpload from "./components/PodcastUpload.jsx";
-
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
   const [menuOpen, setMenuOpen] = useState(true);
@@ -34,6 +33,8 @@ const App = () => {
   }
 
   return (
+ 
+      
     <ThemeProvider theme={darkMod ? darkTheme : lightTheme}>
       <BrowserRouter>
         <Container>
@@ -67,6 +68,8 @@ const App = () => {
         </Container>
       </BrowserRouter>
     </ThemeProvider>
+  
+   
   );
 };
 

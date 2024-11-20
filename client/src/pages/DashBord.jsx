@@ -4,12 +4,12 @@ import PodcastCard from "../components/PodcastCard";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
-
 const DashBord = () => {
   const UserDetails = JSON.parse(localStorage.getItem("user"));
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
+  const [isPlaying, setIsPlaying] = useState( false);
   const audioRef = useRef(new Audio());
   const fetchPodcasts = async () => {
     try {
@@ -70,7 +70,7 @@ const DashBord = () => {
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
                 onPlay={handlePlay}
-                isPlaying={currentlyPlaying === podcast._id} // Corrected here
+                isPlaying={currentlyPlaying === podcast._id} 
                 audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
             ))}
