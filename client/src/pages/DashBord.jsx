@@ -9,7 +9,7 @@ const DashBord = () => {
   const UserDetails = JSON.parse(localStorage.getItem("user"));
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
-  const {isPlaying,audioPlay}=useAudio();
+  const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
   
   const fetchPodcasts = async () => {
     try {
@@ -72,6 +72,7 @@ const DashBord = () => {
                 state={favPodcasts.includes(podcast._id)}
                 onPlay={audioPlay}
                 isPlaying={isPlaying} 
+                currentlyPlaying={currentlyPlaying}
                 audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
               />
             ))}

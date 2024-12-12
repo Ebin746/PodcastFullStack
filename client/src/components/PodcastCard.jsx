@@ -4,8 +4,9 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
+import PlayFrame from "./PlayFrame";
 
-const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay}) => {
+const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay,currentlyPlaying}) => {
   const [isFavorite, setIsFavorite] = useState(state);
   
   let Details = localStorage.getItem("user");
@@ -29,36 +30,42 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlayi
   
   const handlePlayClick = () => {
     onPlay(id,audioSrc);
+    console.log(id,"::",currentlyPlaying)
      };
 
   return (
     <Card>
-      <Top>
-        <FavoriteIconStyled
-          className="icons"
-          onClick={makeFavorite}
-          isFavorite={isFavorite}
-        />
-        <CardImage src={images} />
-        <PlayButtonStyled onClick={handlePlayClick} isPlaying={isPlaying}>
-          <PlayArrowIconStyled isPlaying={isPlaying}>
-            <PlayArrowIcon />
-          </PlayArrowIconStyled>
-        </PlayButtonStyled>
+      <Top>{isPlaying && currentlyPlaying===id?(<PlayFrame onPlay={onPlay} isPlaying={isPlaying} id={id} audioSrc/>):(
+       <>
+       
+       <FavoriteIconStyled
+       className="icons"
+       onClick={makeFavorite}
+       isFavorite={isFavorite}
+     />
+     <CardImage src={images} />
+     <PlayButtonStyled onClick={handlePlayClick} isPlaying={isPlaying}>
+       <PlayArrowIconStyled isPlaying={isPlaying}>
+         <PlayArrowIcon />
+       </PlayArrowIconStyled>
+     </PlayButtonStyled> </>
+      )}
       </Top>
+{isPlaying && currentlyPlaying===id?(<></>):(
       <CardDetails>
-        <MainInfo>
-          <Title>{title}</Title>
-          <About>{about}</About>
-          <CreatorsInfo>
-            <Creators>
-              <Profile className="Profile">p</Profile>
-              <Name>{creator}</Name>
-            </Creators>
-            <Views>{views}</Views>
-          </CreatorsInfo>
-        </MainInfo>
-      </CardDetails>
+      <MainInfo>
+        <Title>{title}</Title>
+        <About>{about}</About>
+        <CreatorsInfo>
+          <Creators>
+            <Profile className="Profile">p</Profile>
+            <Name>{creator}</Name>
+          </Creators>
+          <Views>{views}</Views>
+        </CreatorsInfo>
+      </MainInfo>
+    </CardDetails>
+    )}
     </Card>
   );
 };
@@ -200,20 +207,10 @@ const PlayButtonStyled = styled.div`
   ${({ isPlaying }) =>
     isPlaying &&
     `opacity:1;
-    animation: pulse 0.5s infinite;
+    
   `}
 
-  @keyframes pulse {
-    0% {
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
+
 `;
 
 const PlayArrowIconStyled = styled(PlayArrowIcon)`

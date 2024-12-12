@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const PlayFrame = () => {
+const PlayFrame = ({onPlay,isPlaying,id,audioSrc}) => {
+  const handlePlayClick = () => {
+    onPlay(id,audioSrc);
+     };
+
   return (
     <Container>
       <InnerBox>
@@ -10,7 +14,7 @@ const PlayFrame = () => {
 
       <ButtonBox>
         <SkipButton>&lt;&lt;</SkipButton>
-        <PlayButton>▶</PlayButton>
+        <PlayButton onClick={handlePlayClick}>▶</PlayButton>
         <SkipButton>&gt;&gt;</SkipButton>
       </ButtonBox>
     </Container>
@@ -20,8 +24,8 @@ const PlayFrame = () => {
 export default PlayFrame;
 
 const Container = styled.div`
-  max-width: 250px;
-  height: 350px;
+  max-width: 200px;
+  height: 250px;
   background-color: #15171E; /* bg */
   display: flex;
   flex-direction: column;
@@ -35,7 +39,7 @@ const Container = styled.div`
 
 const ButtonBox = styled.div`
   width: 100%;
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -45,8 +49,8 @@ const ButtonBox = styled.div`
 `;
 
 const PlayButton = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #be1adb; /* primary */
   color: #F2F3F4; /* text_primary */
@@ -87,8 +91,8 @@ const SkipButton = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   background-color: #121212; /* card */
   border-radius: 10px;
   border: 2px solid #be1adb; /* primary */
