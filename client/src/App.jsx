@@ -10,6 +10,7 @@ import Favorite from "./pages/Favorite.jsx";
 import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 import PodcastUpload from "./components/PodcastUpload.jsx";
+import PlayFrame from "./components/PlayFrame.jsx";
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
   const [menuOpen, setMenuOpen] = useState(true);
@@ -63,6 +64,7 @@ const App = () => {
               <Route path="/upload" element={<PodcastUpload/>}/>
               <Route path="/search" element={<Search />} />
               <Route path="/favorite" element={<Favorite />} />
+              <Route path='/test' element={<PlayFrame/>}/>
             </Routes>
           </Frame>
         </Container>
