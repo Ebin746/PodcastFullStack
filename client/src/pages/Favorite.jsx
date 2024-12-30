@@ -7,9 +7,12 @@ const Favorite = () => {
   const {isPlaying,audioPlay}=useAudio();
   const userDetails=JSON.parse(localStorage.getItem('user'))
   const userId=userDetails._id
-  const [favPodcast,setFavPodcast]=useState();
+  const [favPodcast,setFavPodcast]=useState([]);
 const fetchFavorites=async()=>{
-
+if(!userId){
+  alert("please login again");
+  return;
+}
 try {
   const res=await axiosInstance.get(`/user/fav/${userId}`);
 console.warn(res.data )
@@ -25,7 +28,7 @@ setFavPodcast(res.data);
  <>
 <Filter>
 <PodCast>
-{favPodcast? (
+{favPodcast.length>0? (
             favPodcast?.map((podcast, j) => (
               <PodcastCard
                 key={j}
