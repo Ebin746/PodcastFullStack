@@ -23,7 +23,7 @@ const PodcastSchema = new mongoose.Schema({
     },
     avatar: {
       type: String,
-      required: true,
+
     },
   },
   views: {
@@ -32,7 +32,6 @@ const PodcastSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
   },
   src: fileStorage ,
 });

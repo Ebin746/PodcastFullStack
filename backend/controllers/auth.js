@@ -2,6 +2,7 @@ const UserSchema = require("../Schema/user");
 const bcrypt = require("bcrypt");
 const genrateToken = require("../utils/genrateToken");
 
+
 const signup = async (req, res, next) => {
   const { userName, email, password } = req.body;
   try {
@@ -67,4 +68,18 @@ res
   }
 };
 
-module.exports = { signup, login };
+const logout=async (req,res,next)=>{
+try {
+  res.clearCookie("token", {
+    httpOnly: true, // Ensures the cookie can't be accessed by JavaScript
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production (https)
+    sameSite: "Strict", // Prevents CSRF attacks
+    path: "/", // Specifies the path for which the cookie is valid
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+} catch (error) {
+  next();
+}
+}
+module.exports = { signup, login,logout };

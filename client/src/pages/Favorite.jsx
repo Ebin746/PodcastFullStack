@@ -6,7 +6,7 @@ import { useAudio } from '../context/audioContext'
 const Favorite = () => {
   const {isPlaying,audioPlay}=useAudio();
   const userDetails=JSON.parse(localStorage.getItem('user'))
-  const userId=userDetails._id
+  const userId=userDetails?._id
   const [favPodcast,setFavPodcast]=useState([]);
 const fetchFavorites=async()=>{
 if(!userId){
@@ -28,7 +28,7 @@ setFavPodcast(res.data);
  <>
 <Filter>
 <PodCast>
-{favPodcast.length>0? (
+{favPodcast?.length>0? (
             favPodcast?.map((podcast, j) => (
               <PodcastCard
                 key={j}

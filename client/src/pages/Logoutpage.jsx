@@ -1,10 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import axiosInstance from '../utils/axiosInstance';
 const LogoutCard = ({ handleLogout }) => {
 
-    function ConformLogout(){
+    async function ConformLogout(){
         localStorage.clear();
+        try {
+          const response=await axiosInstance.post("/logout")
+          console.log(response);
+          if(response.status===200){
+          console.log("clicked logout");
+          }
+        } catch (error) {
+          console.error(error)
+        } 
         handleLogout()
     }
   return (

@@ -1,5 +1,4 @@
-const { json } = require("express");
-const { options } = require("../routers/user");
+
 const CategorySchema = require("../Schema/categorySchema");
 const PodcastSchema = require("../Schema/podcastSchema");
 

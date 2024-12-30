@@ -23,7 +23,7 @@ const DashBord = () => {
 
   const isFavorite = async () => {
     try {
-      const res = await axiosInstance.get(`/user/fav/${UserDetails._id}`);
+      const res = await axiosInstance.get(`/user/fav/${UserDetails?._id}`);
       let favId = res.data.map((item) => item._id);
       console.log(favId);
       setFavPodcasts(favId);

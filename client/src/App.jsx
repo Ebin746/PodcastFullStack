@@ -11,6 +11,8 @@ import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 import PodcastUpload from "./components/PodcastUpload.jsx";
 import PlayFrame from "./components/PlayFrame.jsx";
+
+import axiosInstance from "./utils/axiosInstance.js";
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
   const [menuOpen, setMenuOpen] = useState(true);
@@ -24,8 +26,8 @@ const App = () => {
   const [islogout, setIsLogout] = useState(false);
 
   function handleLogout() {
-    setIsLogout((islogout) => !islogout);
-    console.log("clicked logout");
+setIsLogout((islogout) => !islogout);
+console.log("clicked logout");
   }
 
   function MenuOpenClose() {

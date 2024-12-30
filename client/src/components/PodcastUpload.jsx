@@ -2,19 +2,34 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-// Styled components
 const UploadContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #eaf2f9;
   border-radius: 10px;
   width: 50%;
   margin: 20px auto;
   max-height: 600px;
   overflow-y: auto;
+
+  /* Adding shadow */
+  box-shadow: 1px 4px 20px rgba(183, 7, 247, 0.97);
+  
+
+  /* Adding 3D effect */
+  transform: perspective(1000px) rotateX(1deg) rotateY(1deg);
+
+  /* Optional: smooth transition effect when hovering */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: perspective(1000px) rotateX(-1deg) rotateY(-1deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
 `;
+
 
 const Title = styled.h2`
   color: #333;
@@ -69,7 +84,7 @@ const PodcastUpload = () => {
     creatorName: "",
     creatorAvatar: "",
     views: 0,
-    imageUrl: "",
+
   });
   const [audioFile, setAudioFile] = useState(null);
   
@@ -102,7 +117,6 @@ const PodcastUpload = () => {
           avatar: podcast.creatorAvatar,
         },
         views: podcast.views,
-        imageUrl: podcast.imageUrl,
       })
     );
 
@@ -168,14 +182,7 @@ const PodcastUpload = () => {
           required
         />
 
-        <Label>Creator Avatar URL</Label>
-        <Input
-          type="text"
-          name="creatorAvatar"
-          value={podcast.creatorAvatar}
-          onChange={handleInputChange}
-          required
-        />
+   
 
         <Label>Views</Label>
         <Input
@@ -185,13 +192,6 @@ const PodcastUpload = () => {
           onChange={handleInputChange}
         />
 
-        <Label>Image URL</Label>
-        <Input
-          type="file"
-          name="image/*"
-          value={podcast.imageUrl}
-          onChange={handleInputChange}
-        />
 
         <Label>Audio File</Label>
         <FileInput
