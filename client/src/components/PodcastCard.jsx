@@ -6,6 +6,8 @@ import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 import PlayFrame from "./PlayFrame";
 
+
+
 const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay,currentlyPlaying}) => {
   const [isFavorite, setIsFavorite] = useState(state);
   
@@ -14,9 +16,16 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlayi
 
   const makeFavorite = async () => {
     const podcastId = id;
-    const userId = userDetails._id;
+    const userId = userDetails?._id;
+    
+    if(!userId){
+
+      alert("Please login to make favorite")
+      return
+    }
     try {
       let url = `/user/fav/${userId}/${podcastId}`;
+
       if (isFavorite) {
         await axiosIntance.delete(url);
       } else {

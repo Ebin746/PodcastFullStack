@@ -1,7 +1,13 @@
 const jwt=require("jsonwebtoken");
 
+
 const genrateToken=(user)=>{
-    return jwt.sign({user},process.env.JWT_SECRET)
+    
+const payload={
+    id:user._id,
+    userName:user.userName
+}
+    return jwt.sign(payload,process.env.JWT_SECRET)
 }
 
 module.exports=genrateToken
