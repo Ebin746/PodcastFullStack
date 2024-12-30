@@ -72,6 +72,7 @@ const PodcastUpload = () => {
     imageUrl: "",
   });
   const [audioFile, setAudioFile] = useState(null);
+  
   const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
@@ -120,7 +121,6 @@ const PodcastUpload = () => {
         creatorName: "",
         creatorAvatar: "",
         views: 0,
-        imageUrl: "",
       });
       setAudioFile(null);
     } catch (err) {
@@ -187,8 +187,8 @@ const PodcastUpload = () => {
 
         <Label>Image URL</Label>
         <Input
-          type="text"
-          name="imageUrl"
+          type="file"
+          name="image/*"
           value={podcast.imageUrl}
           onChange={handleInputChange}
         />
