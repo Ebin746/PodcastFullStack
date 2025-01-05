@@ -1,9 +1,10 @@
+
 const UserSchema = require("../Schema/user");
 
 // Controller to add a podcast to user's favorites
 const addFavoritePodcast = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user;
     const podcastId = req.params.podcastId;
     if (!userId || !podcastId)
       return res.status(400).json({ message: `params missing` });
@@ -22,16 +23,12 @@ const addFavoritePodcast = async (req, res, next) => {
 
 // Controller to get all favorite podcasts
 const getAllFavoritePodcast = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId  = req.user;
 
+ console.log("Favorite")
   // Validate userId
   if (!userId) {
     return res.status(400).json({ message: "User ID is required" });
-  }
-
-  // Check if the userId is a valid format (if needed, add custom validation logic)
-  if (!/^[a-fA-F0-9]{24}$/.test(userId)) {
-    return res.status(400).json({ message: "Invalid User ID format" });
   }
 
   try {
@@ -61,7 +58,7 @@ const getAllFavoritePodcast = async (req, res, next) => {
 
 // Controller to delete a podcast from user's favorites
 const deleteFavoritePodcast = async (req, res, next) => {
-  let userId = req.params.userId;
+  let userId = req.user;
   let podcastId = req.params.podcastId;
   try {
     console.log(userId);
@@ -78,7 +75,7 @@ const deleteFavoritePodcast = async (req, res, next) => {
 // Controller to add a podcast to user's uploads
 const addUploadedPodcast = async (req, res, next) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user;
     const podcastId = req.params.podcastId; // Assuming podcastId is coming from request body
 
     // Update user document by pushing the podcastId to uploads array

@@ -24,7 +24,7 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlayi
       return
     }
     try {
-      let url = `/user/fav/${userId}/${podcastId}`;
+      let url = `/user/fav/${podcastId}`;
 
       if (isFavorite) {
         await axiosIntance.delete(url);

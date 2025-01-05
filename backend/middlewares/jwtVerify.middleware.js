@@ -6,6 +6,8 @@ const authenticationVerify = (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized: token not found" });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user=decoded.id;
+    console.log(decoded.id);
     next();
   } catch (error) {
     console.error("Error verifying token:", error);

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import axiosInstance from '../utils/axiosInstance';
-const LogoutCard = ({ handleLogout }) => {
+const LogoutCard = ({ handleLogout}) => {
 
     async function ConformLogout(){
         localStorage.clear();
@@ -16,6 +16,11 @@ const LogoutCard = ({ handleLogout }) => {
         } 
         handleLogout()
     }
+    useEffect(()=>{
+if(!localStorage.user){
+  handleLogout()
+}
+    },[])
   return (
     <LogoutCardContainer className={'visible'}>
       <LogoutContent>

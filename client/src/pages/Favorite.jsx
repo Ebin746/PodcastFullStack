@@ -14,7 +14,7 @@ if(!userId){
   return;
 }
 try {
-  const res=await axiosInstance.get(`/user/fav/${userId}`);
+  const res=await axiosInstance.get(`/user/fav`);
 console.warn(res.data )
 setFavPodcast(res.data);
 } catch (error) {
