@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 const DashBord = () => {
-  const UserDetails = JSON.parse(localStorage.getItem("user"));
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
   const {isPlaying,audioPlay,currentlyPlaying}=useAudio();

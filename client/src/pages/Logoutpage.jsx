@@ -17,7 +17,7 @@ const LogoutCard = ({ handleLogout}) => {
         handleLogout()
     }
     useEffect(()=>{
-if(!localStorage.user){
+if(!localStorage.getItem('user')){
   handleLogout()
 }
     },[])
