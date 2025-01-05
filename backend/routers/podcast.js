@@ -13,7 +13,7 @@ const { authenticationVerify } = require("../middlewares/jwtVerify.middleware");
 const { upload } = require("../middlewares/multer.middleware");
 const {Imageupload}=require("../middlewares/imageMulter.middleware")
 
-router.post("/uploads", authenticationVerify,upload.single("file"), addPodcast);
+router.post("/uploads", authenticationVerify,upload.single("file"),fileUpload, addPodcast);
 router.get("/search",querySearch);
 router.get("/suggestions",suggestions)
 router.post("/",authenticationVerify,addPodcast);

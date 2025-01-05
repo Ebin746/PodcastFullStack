@@ -1,17 +1,27 @@
 
 const CategorySchema = require("../Schema/categorySchema");
 const PodcastSchema = require("../Schema/podcastSchema");
+const UserSchema=require("../Schema/user");
 
 const addPodcast = async (req, res, next) => {
-  let categoryData;
   try {
-    const { name} = req.body;
-    const podcast=JSON.parse(req.body.podcast);
-    const { title, about, creator, views, imageUrl } =podcast;
-    
+    const userId = req.user;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized or userId missing" });
+    }
+
+    const { name } = req.body;
+    const podcast = JSON.parse(req.body.podcast);
+
+    if (!name || !podcast || !req.audioData) {
+      return res.status(400).json({ error: "Missing required data" });
+    }
+
+    const { title, about, creator, views, imageUrl } = podcast;
     const { filename, path, originalname } = req.audioData;
-    console.log(name,podcast,"frome here");
-    let podcastData = await new PodcastSchema({
+
+    // Save new podcast
+    const podcastData = await new PodcastSchema({
       title,
       about,
       creator: {
@@ -22,25 +32,34 @@ const addPodcast = async (req, res, next) => {
       imageUrl,
       src: { filename, path, originalname },
     }).save();
-    try {
-      categoryData = await CategorySchema.findOne({ name });
-      if (!categoryData) {
-        categoryData = new CategorySchema({
-          name: name,
-          podcasts: [podcastData._id],
-        });
-      } else {
-        categoryData.podcasts.push(podcastData._id);
-      }
-      await categoryData.save();
-    } catch (error) {
-      next(error);
+
+    // Find or create category and add podcast ID
+    let categoryData = await CategorySchema.findOne({ name });
+    if (!categoryData) {
+      categoryData = new CategorySchema({
+        name,
+        podcasts: [podcastData._id],
+      });
+    } else {
+      categoryData.podcasts.push(podcastData._id);
     }
-    res
-      .status(200)
-      .json({ message: "the podcast added successfully", categoryData });
+    await categoryData.save();
+
+    // Update user's uploads with the new podcast ID
+    const user = await UserSchema.findByIdAndUpdate(
+      userId,
+      { $addToSet: { uploads: podcastData._id } },
+      { new: true }
+    );
+    console.log("user",user);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "Podcast added successfully" });
   } catch (error) {
-    next(error);
+    console.error("Error adding podcast:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 const getPodcasts = async (req, res, next) => {

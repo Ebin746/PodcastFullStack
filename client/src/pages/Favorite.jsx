@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import PodcastCard from '../components/PodcastCard'
 import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
@@ -8,6 +8,7 @@ const Favorite = () => {
   const userDetails=JSON.parse(localStorage.getItem('user'))
   const userId=userDetails?._id
   const [favPodcast,setFavPodcast]=useState([]);
+  const [hasFetched, setHasFetched] = useState(false);
 const fetchFavorites=async()=>{
 if(!userId){
   alert("please login again");
@@ -21,9 +22,13 @@ setFavPodcast(res.data);
   console.log(error);
 }
 }
-  useEffect(()=>{
-    fetchFavorites()
-  },[])
+
+useEffect(() => {
+  if (!hasFetched) {
+    fetchFavorites();
+    setHasFetched(true); // Mark as fetched to prevent re-runs
+  }
+}, [hasFetched]); 
   return (
  <>
 <Filter>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PodcastCard from "../components/PodcastCard";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 const DashBord = () => {
@@ -23,10 +23,10 @@ const DashBord = () => {
 
   const isFavorite = async () => {
     try {
-      const res = await axiosInstance.get(`/user/fav/${UserDetails?._id}`);
+      const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
       console.log(favId);
-      setFavPodcasts(favId);
+    setFavPodcasts(favId);
       
     } catch (error) {
       console.log(error);

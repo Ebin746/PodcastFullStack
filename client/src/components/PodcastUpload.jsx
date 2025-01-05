@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+
 
 const UploadContainer = styled.div`
   display: flex;
@@ -127,6 +128,7 @@ const PodcastUpload = () => {
         },
       });
       console.log("Upload success:", response.data);
+    
       alert("Podcast uploaded successfully!");
       // Reset form
       setPodcast({
