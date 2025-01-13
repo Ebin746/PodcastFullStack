@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const{ fileUpload,imageFileUpload}=require("../controllers/multer");
+const{ fileUpload}=require("../controllers/multer");
 const {
   addPodcast,
   getPodcasts,
@@ -11,7 +11,6 @@ const {
 } = require("../controllers/podcast");
 const { authenticationVerify } = require("../middlewares/jwtVerify.middleware");
 const { upload } = require("../middlewares/multer.middleware");
-const {Imageupload}=require("../middlewares/imageMulter.middleware")
 
 router.post("/uploads", authenticationVerify,upload.single("file"),fileUpload, addPodcast);
 router.get("/search",querySearch);

@@ -4,7 +4,11 @@ const PodcastSchema = require("../Schema/podcastSchema");
 const UserSchema=require("../Schema/user");
 
 const addPodcast = async (req, res, next) => {
+
   try {
+
+
+    
     const userId = req.user;
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized or userId missing" });
