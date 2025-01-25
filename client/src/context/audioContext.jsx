@@ -30,12 +30,14 @@ export const AudioProvider = ({ children }) => {
       setCurrentlyPlaying(null);
     };
 
+    const currentAudio = audioRef.current;
+
     // Attach the event listener
-    audioRef.current.addEventListener("ended", handleEnded);
+    currentAudio.addEventListener("ended", handleEnded);
 
     // Cleanup on unmount
     return () => {
-      audioRef.current.removeEventListener("ended", handleEnded);
+      currentAudio.removeEventListener("ended", handleEnded);
     };
   }, []);
 

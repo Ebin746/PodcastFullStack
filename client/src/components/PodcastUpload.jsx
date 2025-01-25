@@ -118,13 +118,7 @@ const PodcastUpload = () => {
            required
          />
  
-         <Label>Views</Label>
-         <Input
-           type="number"
-           name="views"
-           value={podcast.views}
-           onChange={handleInputChange}
-         />
+  
  
          <Label>Audio File</Label>
          <FileInput
