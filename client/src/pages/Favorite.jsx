@@ -3,10 +3,10 @@ import PodcastCard from '../components/PodcastCard'
 import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
 import { useAudio } from '../context/audioContext'
+import { useAuth } from '../context/authContext'
 const Favorite = () => {
+ const {user:userId}=useAuth();
   const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
-  const userDetails=JSON.parse(localStorage.getItem('user'))
-  const userId=userDetails?._id
   const [favPodcast,setFavPodcast]=useState([]);
   const [hasFetched, setHasFetched] = useState(false);
 const fetchFavorites=async()=>{

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { styled, ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./utils/Themes";
 import SideBar from "./components/sideBar.jsx";
@@ -11,12 +11,16 @@ import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 import PodcastUpload from "./components/PodcastUpload.jsx";
 import PlayFrame from "./components/PlayFrame.jsx";
-
+import { useAuth } from "./context/authContext.jsx";
+import axiosInstance from "./utils/axiosInstance.js";
 
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
   const [menuOpen, setMenuOpen] = useState(true);
   const [islogin, setIsLogin] = useState(false);
+
+ 
+
 
   function handleLogin() {
     setIsLogin((islogin) => !islogin);

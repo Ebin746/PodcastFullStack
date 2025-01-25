@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import styled from 'styled-components';
 import axiosInstance from '../utils/axiosInstance';
+import { useAuth } from '../context/authContext';
 
 const AuthForm = ({ handleLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,7 +11,7 @@ const AuthForm = ({ handleLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-
+const {user,signup,login}=useAuth();
   const validateForm = () => {
     if (!userName || !password || (!isLogin && !email) || (!isLogin && !confirmPassword)) {
       setErrorMessage('Please fill out all fields.');
@@ -36,17 +37,16 @@ const AuthForm = ({ handleLogin }) => {
     }
 
     try {
-      let response;
       if (isLogin) {
-        response = await axiosInstance.post("/login", { userName, password });
-        console.log(response.data.user)
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        await login({ userName, password })
+
+        
       } else {
-        response = await axiosInstance.post("/signup", { userName, email, password });
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        await signup({userName, email, password })
+       
       }
 
-      console.log(response.data);
+   
 
       alert(`${isLogin ? 'Login' : 'Signup'} successful!`);
 

@@ -1,26 +1,19 @@
 import  { useEffect } from 'react';
 import styled from 'styled-components';
-import axiosInstance from '../utils/axiosInstance';
-const LogoutCard = ({ handleLogout}) => {
 
+import { useAuth } from '../context/authContext';
+const LogoutCard = ({ handleLogout}) => {
+   const {logout,user}=useAuth()
     async function ConformLogout(){
-        localStorage.clear();
+        console.log(user)
         try {
-          const response=await axiosInstance.post("/logout")
-          console.log(response);
-          if(response.status===200){
-          console.log("clicked logout");
-          }
+          await logout();
         } catch (error) {
           console.error(error)
         } 
         handleLogout()
     }
-    useEffect(()=>{
-if(!localStorage.getItem('user')){
-  handleLogout()
-}
-    },[])
+
   return (
     <LogoutCardContainer className={'visible'}>
       <LogoutContent>

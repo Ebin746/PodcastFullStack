@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PodcastCard from "../components/PodcastCard";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
@@ -14,7 +13,7 @@ const DashBord = () => {
   const fetchPodcasts = async () => {
     setIsLoading(true);
     try {
-      let response = await axios.get("/api/podcast");
+      let response = await axiosInstance.get("/podcast");
       setPodcastDetails(response.data);
       console.log(response.data);
     } catch (error) {

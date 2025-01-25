@@ -2,10 +2,14 @@
 import styled from "styled-components";
 import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import { useAuth } from "../context/authContext";
+import { useEffect } from "react";
+import axiosInstance from "../utils/axiosInstance";
+const NavBar = ({ toggle, handleLogin }) => {
+const {user}=useAuth();
+ 
 
-const navBar = ({ toggle, handleLogin }) => {
-  const Details=localStorage.getItem('user');
-  let userDetails=Details?JSON.parse(Details):null;
+  let userDetails=user;
   console.log(userDetails);
   return (
     <>
@@ -13,14 +17,14 @@ const navBar = ({ toggle, handleLogin }) => {
         <MenuRoundedIcon className="menu" onClick={() => toggle()} />
         <ButtonId onClick={() => !userDetails?handleLogin():null} disabled={userDetails}>
           <Person2RoundedIcon />
-          <p>{userDetails?userDetails.userName:"Login"}</p>
+          <p>{userDetails?userDetails?.userName:"Login"}</p>
         </ButtonId>
       </NavBarDiv>
     </>
   );
 };
 
-export default navBar;
+export default NavBar;
 
 const NavBarDiv = styled.div`
   display: flex;
