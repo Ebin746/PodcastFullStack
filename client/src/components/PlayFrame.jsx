@@ -1,15 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-const PlayFrame = ({onPlay,isPlaying,id,audioSrc}) => {
+const PlayFrame = ({ onPlay, isPlaying, id, audioSrc }) => {
   const handlePlayClick = () => {
-    onPlay(id,audioSrc);
-     };
+    onPlay(id, audioSrc);
+  };
 
   return (
     <Container>
       <InnerBox>
-        <ImageBox />
+        {isPlaying ? (
+          <SoundBars>
+            {Array.from({ length: 10 }).map((_, index) => (
+              <Bar key={index} index={index} />
+            ))}
+          </SoundBars>
+        ) : (
+          <ImageBox />
+        )}
       </InnerBox>
 
       <ButtonBox>
@@ -26,7 +34,7 @@ export default PlayFrame;
 const Container = styled.div`
   max-width: 200px;
   height: 250px;
-  background-color: #15171E; /* bg */
+  background-color: #15171e; /* bg */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,7 +42,7 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  padding: 10px;
+  margin:auto;
 `;
 
 const ButtonBox = styled.div`
@@ -43,7 +51,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #1C1E27; /* bgLight */
+  background-color: #1c1e27; /* bgLight */
   border-top: 2px solid #121212; /* card */
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
 `;
@@ -53,7 +61,7 @@ const PlayButton = styled.div`
   height: 40px;
   border-radius: 50%;
   background-color: #be1adb; /* primary */
-  color: #F2F3F4; /* text_primary */
+  color: #f2f3f4; /* text_primary */
   font-size: 20px;
   font-weight: bold;
   display: flex;
@@ -74,7 +82,7 @@ const SkipButton = styled.div`
   height: 40px;
   border-radius: 50%;
   background-color: #5c5b5b; /* button */
-  color: #F2F3F4; /* text_primary */
+  color: #f2f3f4; /* text_primary */
   font-size: 16px;
   font-weight: bold;
   display: flex;
@@ -97,29 +105,37 @@ const ImageBox = styled.div`
   border-radius: 10px;
   border: 2px solid #be1adb; /* primary */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
 
-const InnerBox = styled.div`
+const SoundBars = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
-  animation: rotate 10s linear infinite;
-  background: linear-gradient(45deg, #1C1E27, #15171E); /* bgLight to bg */
-  border-radius: 50%;
-  padding: 15px;
+  height: 170px;
+  width: 170px;
+  border-radius: 10px;
+  background: #15171e; /* bg */
+`;
 
-  @keyframes rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+const soundAnimation = keyframes`
+  0% { opacity: 0.35; height: 3px; }
+  100% { opacity: 1; height: 70px; }
+`;
+
+const Bar = styled.div`
+  background: #52467b;
+  width: 10px;
+  margin: 0 4px;
+  border-radius: 5px;
+  animation: ${soundAnimation} 0ms ${({ index }) => -index * 100}ms linear infinite alternate;
+  animation-duration: ${({ index }) => 400 + index * 50}ms;
+`;
+const InnerBox = styled.div`
+  width: 170px;
+  height: 170px;
+  background-color: #1c1e27; /* bgLight */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

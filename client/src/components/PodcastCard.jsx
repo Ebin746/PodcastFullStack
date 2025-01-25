@@ -1,4 +1,4 @@
-import  {  useState } from "react";
+import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import styled from "styled-components";
@@ -6,22 +6,30 @@ import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 import PlayFrame from "./PlayFrame";
 
-
-
-const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlaying ,onPlay,currentlyPlaying}) => {
+const PodcastCard = ({
+  id,
+  title,
+  about,
+  views,
+  creator,
+  state,
+  audioSrc,
+  isPlaying,
+  onPlay,
+  currentlyPlaying,
+}) => {
   const [isFavorite, setIsFavorite] = useState(state);
-  
+
   let Details = localStorage.getItem("user");
   const userDetails = JSON.parse(Details);
 
   const makeFavorite = async () => {
     const podcastId = id;
     const userId = userDetails?._id;
-    
-    if(!userId){
 
-      alert("Please login to make favorite")
-      return
+    if (!userId) {
+      alert("Please login to make favorite");
+      return;
     }
     try {
       let url = `/user/fav/${podcastId}`;
@@ -36,45 +44,50 @@ const PodcastCard = ({ id, title, about, views, creator, state, audioSrc,isPlayi
     }
     setIsFavorite((e) => !e);
   };
-  
+
   const handlePlayClick = () => {
-    onPlay(id,audioSrc);
-    console.log(id,"::",currentlyPlaying)
-     };
+    onPlay(id, audioSrc);
+    console.log(id, "::", currentlyPlaying);
+  };
 
   return (
     <Card>
-      <Top>{isPlaying && currentlyPlaying===id?(<PlayFrame onPlay={onPlay} isPlaying={isPlaying} id={id} audioSrc/>):(
-       <>
-       
-       <FavoriteIconStyled
-       className="icons"
-       onClick={makeFavorite}
-       isFavorite={isFavorite}
-     />
-     <CardImage src={images} />
-     <PlayButtonStyled onClick={handlePlayClick} isPlaying={isPlaying}>
-       <PlayArrowIconStyled isPlaying={isPlaying}>
-         <PlayArrowIcon />
-       </PlayArrowIconStyled>
-     </PlayButtonStyled> </>
-      )}
+      <Top>
+        {isPlaying && currentlyPlaying === id ? (
+          <PlayFrame onPlay={onPlay} isPlaying={isPlaying} id={id} audioSrc />
+        ) : (
+          <>
+            <FavoriteIconStyled
+              className="icons"
+              onClick={makeFavorite}
+              isFavorite={isFavorite}
+            />
+            <CardImage src={images} />
+            <PlayButtonStyled onClick={handlePlayClick} isPlaying={isPlaying}>
+              <PlayArrowIconStyled isPlaying={isPlaying}>
+                <PlayArrowIcon />
+              </PlayArrowIconStyled>
+            </PlayButtonStyled>{" "}
+          </>
+        )}
       </Top>
-{isPlaying && currentlyPlaying===id?(<></>):(
-      <CardDetails>
-      <MainInfo>
-        <Title>{title}</Title>
-        <About>{about}</About>
-        <CreatorsInfo>
-          <Creators>
-            <Profile className="Profile">p</Profile>
-            <Name>{creator}</Name>
-          </Creators>
-          <Views>{views}</Views>
-        </CreatorsInfo>
-      </MainInfo>
-    </CardDetails>
-    )}
+      {isPlaying && currentlyPlaying === id ? (
+        <></>
+      ) : (
+        <CardDetails>
+          <MainInfo>
+            <Title>{title}</Title>
+            <About>{about}</About>
+            <CreatorsInfo>
+              <Creators>
+                <Profile className="Profile">p</Profile>
+                <Name>{creator}</Name>
+              </Creators>
+              <Views>{views}</Views>
+            </CreatorsInfo>
+          </MainInfo>
+        </CardDetails>
+      )}
     </Card>
   );
 };
@@ -185,7 +198,7 @@ const FavoriteIconStyled = styled(FavoriteIcon)`
     box-shadow 1s ease-in-out;
 
   &:hover {
-    transition: color 0.4s ease-in-out, transform 0.7s ease-in-out;
+    transition: color 0.4s ease-in-out, transform 0.4s ease-in-out;
     color: ${({ isFavorite }) => (isFavorite ? "red" : "#ccccccde")};
     transform: scale(1.7); /* Scale up on hover */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add box-shadow on hover */
@@ -218,8 +231,6 @@ const PlayButtonStyled = styled.div`
     `opacity:1;
     
   `}
-
-
 `;
 
 const PlayArrowIconStyled = styled(PlayArrowIcon)`
