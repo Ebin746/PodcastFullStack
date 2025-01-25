@@ -3,7 +3,8 @@ const categorySchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
-  },
+    set:(value)=>value.toUpperCase()
+  }, 
   podcasts: [
     {
       type: mongoose.Schema.Types.ObjectId,

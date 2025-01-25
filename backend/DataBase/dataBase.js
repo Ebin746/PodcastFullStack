@@ -12,8 +12,8 @@
 // module.exports = dataBaseConnection;
 const mongoose = require("mongoose");
 require("dotenv").config();
-const URL = process.env.DATABASE_URL;
-
+const URL ="mongodb+srv://ebinamson91:ebin%402004@cluster0.ytopw90.mongodb.net/podcast?retryWrites=true&w=majority&appName=Cluster0"
+console.log(URL)
 const dataBase = async () => {
   try {
     const base = await mongoose.connect(URL);
