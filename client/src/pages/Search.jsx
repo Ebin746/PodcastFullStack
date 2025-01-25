@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { styled, keyframes } from "styled-components"; // Corrected import
 import SearchIcon from "@mui/icons-material/Search";
-import MicNoneRoundedIcon from "@mui/icons-material/MicNoneRounded";
-import { Category } from "../utils/Data";
 import { HashLink } from "react-router-hash-link";
 import axiosInstance from "../utils/axiosInstance";
 import debounce from "lodash/debounce";
-import { assign } from "lodash";
+import Loading from "../components/Loading";
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -26,20 +24,20 @@ const Search = () => {
     setError(null);
     try {
       const response = await axiosInstance(
-        `/podcast/search?query=${encodeURIComponent(query.trim())}&page=1,limit=10`
+        `/podcast/search?query=${encodeURIComponent(
+          query.trim()
+        )}&page=1,limit=10`
       );
       console.log(response);
 
-      setResults(response.data); 
-  
+      setResults(response.data);
     } catch (err) {
       console.error("Search error:", err);
       setError("Failed to fetch search results. Please try again.");
     } finally {
       setLoading(false);
-      setQuery('')
-      setSuggestions([])
-  
+      setQuery("");
+      setSuggestions([]);
     }
   };
   //sugestion maker
@@ -50,9 +48,9 @@ const Search = () => {
       );
       // Assuming result.data is an array of objects
       const objects = result.data.results;
-      console.log(objects)
+      console.log(objects);
       setSuggestions(
-            objects.map((item) => ({ id: item._id, name: item.title })),
+        objects.map((item) => ({ id: item._id, name: item.title }))
       );
     } catch (error) {
       console.error("Error fetching suggestions", error);
@@ -81,7 +79,7 @@ const Search = () => {
   const handleSuggestionClick = (suggestion, e) => {
     e.preventDefault(); // Corrected the typo here
     setQuery(suggestion.name);
-    handleSearch()
+    handleSearch();
 
     console.log(suggestion);
   };
@@ -105,15 +103,19 @@ const Search = () => {
         </SearchBar>
 
         <SuggestionsContainer>
-  {suggestions.length!==0&&suggestions?.map((suggestion) => (
-    <SuggestionItem key={suggestion.id} onClick={(e)=>handleSuggestionClick(suggestion,e)}>
-      <SuggestionText >{suggestion.name} </SuggestionText>
-    </SuggestionItem>
-  ))}
-</SuggestionsContainer>
+          {suggestions.length !== 0 &&
+            suggestions?.map((suggestion) => (
+              <SuggestionItem
+                key={suggestion.id}
+                onClick={(e) => handleSuggestionClick(suggestion, e)}
+              >
+                <SuggestionText>{suggestion.name} </SuggestionText>
+              </SuggestionItem>
+            ))}
+        </SuggestionsContainer>
 
         <SectionWrapper>
-          {loading && <p>Loading...........</p>}
+          {loading && <Loading />}
           {error && (
             <p style={{ backgroundColor: "red" }}>Error occured on Searching</p>
           )}
@@ -136,7 +138,9 @@ const Search = () => {
               </Sections>
             </HashLink>
           ))}
-          {!loading && !error && results.length === 0 && <p>NO DATA FOUND</p>}
+          {!loading && !error && results.length === 0 && (
+            <p>just search something</p>
+          )}
         </SectionWrapper>
       </BottomSearch>
     </SearchContainer>
@@ -144,8 +148,6 @@ const Search = () => {
 };
 
 export default Search;
-
-
 
 const SuggestionsContainer = styled.div`
   display: flex;
@@ -179,8 +181,6 @@ const SuggestionText = styled.p`
   font-size: 16px;
   color: #333;
 `;
-
-
 
 const gradientAnimation = keyframes`
   0% {

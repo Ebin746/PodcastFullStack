@@ -1,6 +1,152 @@
 import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import Loading from "./Loading";
+
+const PodcastUpload = () => {
+  const [category, setCategory] = useState("");
+  const [podcast, setPodcast] = useState({
+    title: "",
+    about: "",
+    creatorName: "",
+    creatorAvatar: "",
+    views: 0,
+  });
+  const [audioFile, setAudioFile] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
+
+  const handleInputChange = (e) => {
+    setPodcast({
+      ...podcast,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    setAudioFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+      setIsLoading(true)
+    const formData = new FormData();
+    formData.append("file", audioFile);
+    formData.append("name", category);
+    formData.append(
+      "podcast",
+      JSON.stringify({
+        title: podcast.title,
+        about: podcast.about,
+        creator: {
+          name: podcast.creatorName,
+          avatar: podcast.creatorAvatar,
+        },
+        views: podcast.views,
+      })
+    );
+
+    try {
+    
+      const response = await axios.post("/api/podcast/uploads", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Upload success:", response.data);
+      alert("Podcast uploaded successfully!");
+
+      // Reset form after successful upload
+      setPodcast({
+        title: "",
+        about: "",
+        creatorName: "",
+        creatorAvatar: "",
+        views: 0,
+      });
+      setAudioFile(null);
+    
+    } catch (err) {
+      setError("Failed to upload podcast.");
+      console.error("Error uploading:", err);
+   }finally{
+    setIsLoading(false)
+   }
+  };
+
+  return (
+     <>
+     {isLoading?(<Loading/>):(
+       <UploadContainer>
+       <Title>Upload Podcast</Title>
+       <Form onSubmit={handleSubmit}>
+         <Label>Category</Label>
+         <Input
+           type="text"
+           name="title"
+           value={category}
+           onChange={(e) => {
+             setCategory(e.target.value);
+           }}
+           required
+         />
+         <Label>Title</Label>
+         <Input
+           type="text"
+           name="title"
+           value={podcast.title}
+           onChange={handleInputChange}
+           required
+         />
+ 
+         <Label>About</Label>
+         <Input
+           type="text"
+           name="about"
+           value={podcast.about}
+           onChange={handleInputChange}
+           required
+         />
+ 
+         <Label>Creator Name</Label>
+         <Input
+           type="text"
+           name="creatorName"
+           value={podcast.creatorName}
+           onChange={handleInputChange}
+           required
+         />
+ 
+         <Label>Views</Label>
+         <Input
+           type="number"
+           name="views"
+           value={podcast.views}
+           onChange={handleInputChange}
+         />
+ 
+         <Label>Audio File</Label>
+         <FileInput
+           type="file"
+           accept="audio/*"
+           onChange={handleFileChange}
+           required
+         />
+ 
+         <Button type="submit">Upload Podcast</Button>
+         {error && <ErrorMessage>{error}</ErrorMessage>}
+       </Form>
+ 
+       {/* Show Loading Component when isLoading is true */}
+     
+     </UploadContainer>
+     )}
+     </>
+  );
+};
+
+export default PodcastUpload;
 
 
 const UploadContainer = styled.div`
@@ -76,138 +222,3 @@ const ErrorMessage = styled.div`
   color: red;
   margin-top: 10px;
 `;
-
-const PodcastUpload = () => {
-  const [category,setCategory]=useState("")
-  const [podcast, setPodcast] = useState({
-    title: "",
-    about: "",
-    creatorName: "",
-    creatorAvatar: "",
-    views: 0,
-
-  });
-  const [audioFile, setAudioFile] = useState(null);
-  
-  const [error, setError] = useState(null);
-
-  const handleInputChange = (e) => {
-    setPodcast({
-      ...podcast,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    setAudioFile(e.target.files[0]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("file", audioFile);
-    formData.append("name",category)
-    formData.append(
-      "podcast",
-      JSON.stringify({
-        title: podcast.title,
-        about: podcast.about,
-        creator: {
-          name: podcast.creatorName,
-          avatar: podcast.creatorAvatar,
-        },
-        views: podcast.views,
-      })
-    );
-
-    try {
-      const response = await axios.post("/api/podcast/uploads", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Upload success:", response.data);
-    
-      alert("Podcast uploaded successfully!");
-      // Reset form
-      setPodcast({
-        title: "",
-        about: "",
-        creatorName: "",
-        creatorAvatar: "",
-        views: 0,
-      });
-      setAudioFile(null);
-    } catch (err) {
-      setError("Failed to upload podcast.");
-      console.error("Error uploading:", err);
-    }
-  };
-
-  return (
-    <UploadContainer>
-      <Title>Upload Podcast</Title>
-      <Form onSubmit={handleSubmit}>
-      <Label>category</Label>
-        <Input
-          type="text"
-          name="title"
-          value={category}
-          onChange={(e)=>{setCategory(e.target.value)}}
-          required
-        />
-        <Label>Title</Label>
-        <Input
-          type="text"
-          name="title"
-          value={podcast.title}
-          onChange={handleInputChange}
-          required
-        />
-
-        <Label>About</Label>
-        <Input
-          type="text"
-          name="about"
-          value={podcast.about}
-          onChange={handleInputChange}
-          required
-        />
-
-        <Label>Creator Name</Label>
-        <Input
-          type="text"
-          name="creatorName"
-          value={podcast.creatorName}
-          onChange={handleInputChange}
-          required
-        />
-
-   
-
-        <Label>Views</Label>
-        <Input
-          type="number"
-          name="views"
-          value={podcast.views}
-          onChange={handleInputChange}
-        />
-
-
-        <Label>Audio File</Label>
-        <FileInput
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          required
-        />
-
-        <Button type="submit">Upload Podcast</Button>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-      </Form>
-    </UploadContainer>
-  );
-};
-
-export default PodcastUpload;
