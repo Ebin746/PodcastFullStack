@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
 import { useAudio } from '../context/audioContext'
 const Favorite = () => {
-  const {isPlaying,audioPlay}=useAudio();
+  const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
   const userDetails=JSON.parse(localStorage.getItem('user'))
   const userId=userDetails?._id
   const [favPodcast,setFavPodcast]=useState([]);
@@ -45,6 +45,7 @@ useEffect(() => {
                 state={true}
                 onPlay={audioPlay}
                 isPlaying={isPlaying}
+                currentlyPlaying={currentlyPlaying}
                 audioSrc={podcast.src}
               />
             ))
