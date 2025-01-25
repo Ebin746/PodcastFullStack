@@ -72,7 +72,7 @@ const DashBord = () => {
                 onPlay={audioPlay}
                 isPlaying={isPlaying} 
                 currentlyPlaying={currentlyPlaying}
-                audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
+                audioSrc={podcast.src}
               />
             ))}
           </PodCast>

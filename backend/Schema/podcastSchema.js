@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
-const fileStorage = new mongoose.Schema({
-  filename: String,
-  path: String,
-  originalname: String,
-});
+
 
 const PodcastSchema = new mongoose.Schema({
   title: {
@@ -33,6 +29,8 @@ const PodcastSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
   },
-  src: fileStorage ,
+  src: {
+    type:String
+  } 
 });
 module.exports = mongoose.model("Podcast", PodcastSchema);

@@ -6,9 +6,7 @@ const UserSchema=require("../Schema/user");
 const addPodcast = async (req, res, next) => {
 
   try {
-
-
-    
+   
     const userId = req.user;
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized or userId missing" });
@@ -22,7 +20,7 @@ const addPodcast = async (req, res, next) => {
     }
 
     const { title, about, creator, views, imageUrl } = podcast;
-    const { filename, path, originalname } = req.audioData;
+    const {url}= req.audioData;
 
     // Save new podcast
     const podcastData = await new PodcastSchema({
@@ -34,7 +32,7 @@ const addPodcast = async (req, res, next) => {
       },
       views,
       imageUrl,
-      src: { filename, path, originalname },
+      src: url,
     }).save();
 
     // Find or create category and add podcast ID
