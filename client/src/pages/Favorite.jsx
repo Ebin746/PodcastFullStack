@@ -45,7 +45,7 @@ useEffect(() => {
                 state={true}
                 onPlay={audioPlay}
                 isPlaying={isPlaying}
-                audioSrc={`http://localhost:3000/uploads/${podcast.src?.filename}`}
+                audioSrc={podcast.src}
               />
             ))
           ) : (

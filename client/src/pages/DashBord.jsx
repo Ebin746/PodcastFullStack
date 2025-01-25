@@ -5,12 +5,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
+import Loading from "../components/Loading";
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
   const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
-  
+  const [isLoading,setIsLoading]=useState(false);
   const fetchPodcasts = async () => {
+    setIsLoading(true);
     try {
       let response = await axios.get("/api/podcast");
       setPodcastDetails(response.data);
@@ -18,40 +20,39 @@ const DashBord = () => {
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   const isFavorite = async () => {
     try {
+      setIsLoading(true)
       const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
-      console.log(favId);
+      
     setFavPodcasts(favId);
       
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchPodcasts();
     isFavorite();
+    fetchPodcasts();
+
   }, []);
 
-  
-  //   console.log(audioSrc)
-  //   if (currentlyPlaying === id) {
-  //     audioRef.current.pause();
-  //   } else {
-  //     audioRef.current.pause();
-  //     audioRef.current.src = audioSrc;
-  //     audioRef.current.play();
-  //     setCurrentlyPlaying(id);
-  //   }
-  // };
 
   return (
+    isLoading?(<Loading/>):(
     <MainDashBoard>
       {podcastDetails?.map((category, i) => (
+        
         <Filter key={i} id={category._id}>
           <Topic>
             {category.name.toLocaleUpperCase()}
@@ -61,6 +62,7 @@ const DashBord = () => {
           </Topic>
           <PodCast>
             {category?.podcasts?.map((podcast, j) => (
+              
               <PodcastCard
                 key={j}
                 id={podcast._id}
@@ -69,6 +71,7 @@ const DashBord = () => {
                 creator={podcast.creator?.name}
                 views={podcast.views}
                 state={favPodcasts.includes(podcast._id)}
+
                 onPlay={audioPlay}
                 isPlaying={isPlaying} 
                 currentlyPlaying={currentlyPlaying}
@@ -78,7 +81,7 @@ const DashBord = () => {
           </PodCast>
         </Filter>
       ))}
-    </MainDashBoard>
+    </MainDashBoard>)
   );
 };
 
