@@ -6,7 +6,7 @@ import macrosPlugin from "vite-plugin-babel-macros";
 export default defineConfig({
   server:{
 proxy:{
-  '/api':'http://localhost:3000/',
+  '/api':'https://podcastbackend-y85g.onrender.com/',
 },
   },
   plugins: [react(),macrosPlugin()],
