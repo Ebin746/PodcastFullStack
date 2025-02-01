@@ -115,7 +115,7 @@ const updatePodcast = async (req, res, next) => {
 };
 const querySearch = async (req, res, next) => {
   const { query, page = 1, limit = 10 } = req.query;
-  console.log(query);
+
   try {
     const result = await PodcastSchema.find({
       $or: [
@@ -136,8 +136,7 @@ const querySearch = async (req, res, next) => {
 const suggestions = async (req, res, next) => {
   const { query, page = 1, limit = 10 } = req.query;
 
-  // Ensure the query parameter is provided
-  console.log(query);
+
   if (!query) {
     return res.status(400).json({ message: "Query parameter is required" });
   }

@@ -1,6 +1,7 @@
 
 const UserSchema = require("../Schema/user");
 
+
 // Controller to add a podcast to user's favorites
 const addFavoritePodcast = async (req, res, next) => {
   try {
@@ -25,7 +26,7 @@ const addFavoritePodcast = async (req, res, next) => {
 const getAllFavoritePodcast = async (req, res, next) => {
   const userId  = req.user;
 
- console.log("Favorite")
+
   // Validate userId
   if (!userId) {
     return res.status(400).json({ message: "User ID is required" });
@@ -61,7 +62,7 @@ const deleteFavoritePodcast = async (req, res, next) => {
   let userId = req.user;
   let podcastId = req.params.podcastId;
   try {
-    console.log(userId);
+
     await UserSchema.updateOne(
       { _id: userId },
       { $pull: { favarates: podcastId } }

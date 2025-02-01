@@ -12,7 +12,7 @@
 // module.exports = dataBaseConnection;
 const mongoose = require("mongoose");
 require("dotenv").config();
-const URL ="mongodb+srv://ebinamson91:ebin%402004@cluster0.ytopw90.mongodb.net/podcast?retryWrites=true&w=majority&appName=Cluster0"
+const URL =process.env.DATADBASE_URL
 console.log(URL)
 const dataBase = async () => {
   try {

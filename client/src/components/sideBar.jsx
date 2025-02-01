@@ -1,16 +1,15 @@
-import React from "react";
+
 import styled from "styled-components";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import MicNoneRoundedIcon from "@mui/icons-material/MicNoneRounded";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 
 const SideBar = ({
   menuOpen,
