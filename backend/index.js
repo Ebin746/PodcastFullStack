@@ -18,7 +18,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 app.use(cors({
-  origin:"https://podcasto.netlify.app/",
+  origin:"https://podcasto.netlify.app",
   credentials:true
 }));
 app.use('/uploads',express.static(uploadDir));
