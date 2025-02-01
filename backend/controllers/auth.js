@@ -26,7 +26,8 @@ const signup = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // true in production
-        sameSite: "Strict",
+        sameSite: "None", // Required for cross-origin authentication
+        path: "/", 
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
       .json({ message: "Authentication successful", user });
@@ -56,7 +57,8 @@ const login = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // true in production
-        sameSite: true,
+        sameSite: "None", // Required for cross-origin authentication
+        path: "/", 
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
       .json({ message: "Authentication successful", user });
