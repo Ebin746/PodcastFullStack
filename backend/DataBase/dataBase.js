@@ -1,4 +1,5 @@
-// const mongoose = require("mongoose");
+
+require("dotenv").config();// const mongoose = require("mongoose");
 
 // const dataBaseConnection = async () => {
 //   try {
@@ -11,9 +12,9 @@
 
 // module.exports = dataBaseConnection;
 const mongoose = require("mongoose");
-require("dotenv").config();
-const URL =process.env.DATADBASE_URL
-console.log(URL)
+
+const URL =process.env.DATABASE_URL
+console.log("url",URL)
 const dataBase = async () => {
   try {
     const base = await mongoose.connect(URL);
