@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -10,7 +9,6 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import { Link } from "react-router-dom";
 
-
 const SideBar = ({
   menuOpen,
   setMenuOpen,
@@ -18,7 +16,6 @@ const SideBar = ({
   setDarkMod,
   handleLogout,
 }) => {
-
   const Menuitems = [
     {
       link: "/",
@@ -29,7 +26,8 @@ const SideBar = ({
       link: "/search",
       name: "Search",
       icon: <SearchIcon />,
-    },   {
+    },
+    {
       link: "/upload",
       name: "UPLOad",
       icon: <SearchIcon />,
@@ -41,7 +39,6 @@ const SideBar = ({
     },
   ];
   const buttons = [
-    
     {
       fun: () => setDarkMod((darkMod) => !darkMod),
       name: darkMod ? "Dark mod " : "Light Mod",
