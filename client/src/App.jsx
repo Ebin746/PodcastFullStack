@@ -115,6 +115,9 @@ const LoginDiv = styled.div`
     z-index: 5;
     opacity: 1;
     pointer-events: auto;
+    transform: scale(1);
+    transition: 1s;
+
   }
 `;
 

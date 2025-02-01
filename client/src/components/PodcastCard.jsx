@@ -5,6 +5,7 @@ import styled from "styled-components";
 import images from "/images/podcast-neon-signs-style-text-free-vector.jpg";
 import axiosIntance from "../utils/axiosInstance";
 import PlayFrame from "./PlayFrame";
+import { useAuth } from "../context/authContext";
 
 const PodcastCard = ({
   id,
@@ -13,19 +14,19 @@ const PodcastCard = ({
   views,
   creator,
   state,
+  skipForward,
+  skipBackward,
   audioSrc,
   isPlaying,
   onPlay,
   currentlyPlaying,
 }) => {
   const [isFavorite, setIsFavorite] = useState(state);
-
-  let Details = localStorage.getItem("user");
-  const userDetails = JSON.parse(Details);
+  const { user:userId } = useAuth();
 
   const makeFavorite = async () => {
     const podcastId = id;
-    const userId = userDetails?._id;
+ 
 
     if (!userId) {
       alert("Please login to make favorite");
@@ -47,14 +48,20 @@ const PodcastCard = ({
 
   const handlePlayClick = () => {
     onPlay(id, audioSrc);
-    console.log(id, "::", currentlyPlaying);
   };
 
   return (
     <Card>
       <Top>
         {isPlaying && currentlyPlaying === id ? (
-          <PlayFrame onPlay={onPlay} isPlaying={isPlaying} id={id} audioSrc />
+          <PlayFrame
+            onPlay={onPlay}
+            isPlaying={isPlaying}
+            id={id}
+            audioSrc={audioSrc}
+            skipForward={skipForward}
+            skipBackward={skipBackward}
+          />
         ) : (
           <>
             <FavoriteIconStyled
@@ -67,7 +74,7 @@ const PodcastCard = ({
               <PlayArrowIconStyled isPlaying={isPlaying}>
                 <PlayArrowIcon />
               </PlayArrowIconStyled>
-            </PlayButtonStyled>{" "}
+            </PlayButtonStyled>
           </>
         )}
       </Top>
@@ -95,9 +102,9 @@ const PodcastCard = ({
 export default PodcastCard;
 
 // Styled components
-
 const Card = styled.div`
   margin-top: 20px;
+  margin-bottom: 20px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -110,6 +117,11 @@ const Card = styled.div`
 
   &:hover {
     transform: scale(1.05);
+  }
+
+  @media (max-width: 450px) {
+    margin-top: 0px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -139,7 +151,9 @@ const Creators = styled.div`
   gap: 10px;
 `;
 
-const Name = styled.div``;
+const Name = styled.div`
+  padding-top: 5px;
+`;
 
 const Profile = styled.div`
   background-color: rgb(4, 108, 108);
@@ -200,12 +214,12 @@ const FavoriteIconStyled = styled(FavoriteIcon)`
   &:hover {
     transition: color 0.4s ease-in-out, transform 0.4s ease-in-out;
     color: ${({ isFavorite }) => (isFavorite ? "red" : "#ccccccde")};
-    transform: scale(1.7); /* Scale up on hover */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add box-shadow on hover */
+    transform: scale(1.7);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
 
   &:active {
-    transform: scale(1.3); /* Scale down when clicked */
+    transform: scale(1.3);
   }
 `;
 
@@ -216,29 +230,26 @@ const PlayButtonStyled = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
-  padding: 10px; /* Increased padding for better hit area */
-  opacity: 0; /* Initially hidden */
+  padding: 10px;
+  opacity: 0;
   transition: opacity 0.3s ease;
 
-  /* Show on hover */
   ${Card}:hover & {
     opacity: 1;
   }
 
-  /* Scale up when playing */
   ${({ isPlaying }) =>
     isPlaying &&
     `opacity:1;
-    
   `}
 `;
 
 const PlayArrowIconStyled = styled(PlayArrowIcon)`
-  color: #f8f8f8; /* Change play icon color */
-  font-size: 60px; /* Increase icon size */
-  display: flex; /* Use flexbox to center the icon */
-  align-items: center; /* Align items vertically */
-  justify-content: center; /* Align items horizontally */
-  height: 100%; /* Ensure it takes full height of parent */
-  width: 100%; /* Ensure it takes full width of parent */
+  color: #f8f8f8;
+  font-size: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 `;

@@ -8,7 +8,7 @@ import Loading from "../components/Loading";
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
-  const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
+  const { isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward } = useAudio();
   const [isLoading,setIsLoading]=useState(false);
   const fetchPodcasts = async () => {
     setIsLoading(true);
@@ -42,6 +42,7 @@ const DashBord = () => {
 
   useEffect(() => {
     isFavorite();
+
     fetchPodcasts();
 
   }, []);
@@ -69,8 +70,9 @@ const DashBord = () => {
                 about={podcast.about}
                 creator={podcast.creator?.name}
                 views={podcast.views}
-                state={favPodcasts.includes(podcast._id)}
-
+                state={favPodcasts.includes(podcast._id.toString())}
+                skipForward={skipForward}
+                skipBackward={skipBackward} 
                 onPlay={audioPlay}
                 isPlaying={isPlaying} 
                 currentlyPlaying={currentlyPlaying}

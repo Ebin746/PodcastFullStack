@@ -14,7 +14,7 @@ const PodcastUpload = () => {
   });
   const [audioFile, setAudioFile] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setPodcast({
@@ -29,7 +29,7 @@ const PodcastUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      setIsLoading(true)
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("file", audioFile);
     formData.append("name", category);
@@ -47,101 +47,56 @@ const PodcastUpload = () => {
     );
 
     try {
-    
       const response = await axios.post("/api/podcast/uploads", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       console.log("Upload success:", response.data);
       alert("Podcast uploaded successfully!");
-
-      // Reset form after successful upload
-      setPodcast({
-        title: "",
-        about: "",
-        creatorName: "",
-        creatorAvatar: "",
-        views: 0,
-      });
+      setPodcast({ title: "", about: "", creatorName: "", creatorAvatar: "", views: 0 });
       setAudioFile(null);
-    
     } catch (err) {
       setError("Failed to upload podcast.");
       console.error("Error uploading:", err);
-   }finally{
-    setIsLoading(false)
-   }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-     <>
-     {isLoading?(<Loading/>):(
-       <UploadContainer>
-       <Title>Upload Podcast</Title>
-       <Form onSubmit={handleSubmit}>
-         <Label>Category</Label>
-         <Input
-           type="text"
-           name="title"
-           value={category}
-           onChange={(e) => {
-             setCategory(e.target.value);
-           }}
-           required
-         />
-         <Label>Title</Label>
-         <Input
-           type="text"
-           name="title"
-           value={podcast.title}
-           onChange={handleInputChange}
-           required
-         />
- 
-         <Label>About</Label>
-         <Input
-           type="text"
-           name="about"
-           value={podcast.about}
-           onChange={handleInputChange}
-           required
-         />
- 
-         <Label>Creator Name</Label>
-         <Input
-           type="text"
-           name="creatorName"
-           value={podcast.creatorName}
-           onChange={handleInputChange}
-           required
-         />
- 
-  
- 
-         <Label>Audio File</Label>
-         <FileInput
-           type="file"
-           accept="audio/*"
-           onChange={handleFileChange}
-           required
-         />
- 
-         <Button type="submit">Upload Podcast</Button>
-         {error && <ErrorMessage>{error}</ErrorMessage>}
-       </Form>
- 
-       {/* Show Loading Component when isLoading is true */}
-     
-     </UploadContainer>
-     )}
-     </>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <UploadContainer>
+          <Title>Upload Podcast</Title>
+          <Form onSubmit={handleSubmit}>
+            <Label>Category</Label>
+            <Input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
+
+            <Label>Title</Label>
+            <Input type="text" name="title" value={podcast.title} onChange={handleInputChange} required />
+
+            <Label>About</Label>
+            <Input type="text" name="about" value={podcast.about} onChange={handleInputChange} required />
+
+            <Label>Creator Name</Label>
+            <Input type="text" name="creatorName" value={podcast.creatorName} onChange={handleInputChange} required />
+
+            <Label>Audio File</Label>
+            <FileInput type="file" accept="audio/*" onChange={handleFileChange} required />
+
+            <Button type="submit">Upload Podcast</Button>
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+          </Form>
+        </UploadContainer>
+      )}
+    </>
   );
 };
 
 export default PodcastUpload;
-
 
 const UploadContainer = styled.div`
   display: flex;
@@ -150,30 +105,21 @@ const UploadContainer = styled.div`
   padding: 20px;
   background-color: #eaf2f9;
   border-radius: 10px;
-  width: 50%;
-  margin: 20px auto;
-  max-height: 600px;
-  overflow-y: auto;
-
-  /* Adding shadow */
+  width: 80%;
+  max-width: 600px;
+  margin:auto;
   box-shadow: 1px 4px 20px rgba(183, 7, 247, 0.97);
-  
-
-  /* Adding 3D effect */
   transform: perspective(1000px) rotateX(1deg) rotateY(1deg);
-
-  /* Optional: smooth transition effect when hovering */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-
   &:hover {
     transform: perspective(1000px) rotateX(-1deg) rotateY(-1deg);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 12px 30px rgba(0, 0, 0, 0.15);
   }
 `;
 
-
 const Title = styled.h2`
   color: #333;
+  text-align: center;
 `;
 
 const Form = styled.form`
@@ -189,9 +135,10 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 10px;
-  margin: 5px 0;
+  margin: auto;
   border-radius: 5px;
   border: 1px solid #ccc;
+  width: 90%;
 `;
 
 const FileInput = styled.input`
@@ -206,7 +153,6 @@ const Button = styled.button`
   border-radius: 5px;
   margin-top: 20px;
   cursor: pointer;
-
   &:hover {
     background-color: #0056b3;
   }
@@ -215,4 +161,5 @@ const Button = styled.button`
 const ErrorMessage = styled.div`
   color: red;
   margin-top: 10px;
+  text-align: center;
 `;

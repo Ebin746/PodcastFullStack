@@ -8,7 +8,7 @@ const Favorite = () => {
  const {user:userId}=useAuth();
   const {isPlaying,audioPlay,currentlyPlaying}=useAudio();
   const [favPodcast,setFavPodcast]=useState([]);
-  const [hasFetched, setHasFetched] = useState(false);
+ 
 const fetchFavorites=async()=>{
 if(!userId){
   alert("please login again");
@@ -16,7 +16,7 @@ if(!userId){
 }
 try {
   const res=await axiosInstance.get(`/user/fav`);
-console.warn(res.data )
+console.warn(res.data)
 setFavPodcast(res.data);
 } catch (error) {
   console.log(error);
@@ -24,11 +24,8 @@ setFavPodcast(res.data);
 }
 
 useEffect(() => {
-  if (!hasFetched) {
     fetchFavorites();
-    setHasFetched(true); // Mark as fetched to prevent re-runs
-  }
-}, [hasFetched]); 
+},[]); 
   return (
  <>
 <Filter>

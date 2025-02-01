@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (credentials) => {
     try {
       const { data } = await axiosInstance.post("/signup", credentials);
+      console.log(data)
       setUser(data.user); // Assuming the backend returns { user: userData }
     } catch (error) {
       console.error("Signup failed", error);

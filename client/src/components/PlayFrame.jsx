@@ -1,7 +1,7 @@
+import styled, { keyframes } from "styled-components";
+import { Play, SkipBack, SkipForward } from "lucide-react";
 
-import styled, { keyframes } from 'styled-components';
-
-const PlayFrame = ({ onPlay, isPlaying, id, audioSrc }) => {
+const PlayFrame = ({ onPlay, isPlaying, id, audioSrc, skipForward, skipBackward }) => {
   const handlePlayClick = () => {
     onPlay(id, audioSrc);
   };
@@ -21,9 +21,15 @@ const PlayFrame = ({ onPlay, isPlaying, id, audioSrc }) => {
       </InnerBox>
 
       <ButtonBox>
-        <SkipButton>&lt;&lt;</SkipButton>
-        <PlayButton onClick={handlePlayClick}>▶</PlayButton>
-        <SkipButton>&gt;&gt;</SkipButton>
+        <SkipButton onClick={skipBackward}>
+          <SkipBack size={18} color="#f2f3f4" />
+        </SkipButton>
+        <PlayButton onClick={handlePlayClick}>
+          <Play size={24} color="#f2f3f4" />
+        </PlayButton>
+        <SkipButton onClick={skipForward}>
+          <SkipForward size={18} color="#f2f3f4" />
+        </SkipButton>
       </ButtonBox>
     </Container>
   );
@@ -34,7 +40,7 @@ export default PlayFrame;
 const Container = styled.div`
   max-width: 200px;
   height: 250px;
-  background-color: #15171e; /* bg */
+  background-color: #15171e;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +48,7 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  margin:auto;
+  margin: auto;
 `;
 
 const ButtonBox = styled.div`
@@ -51,59 +57,52 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #1c1e27; /* bgLight */
-  border-top: 2px solid #121212; /* card */
+  background-color: #1c1e27;
+  border-top: 2px solid #121212;
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
 `;
 
 const PlayButton = styled.div`
   width: 40px;
   height: 40px;
+  margin: 2px;
   border-radius: 50%;
-  background-color: #be1adb; /* primary */
-  color: #f2f3f4; /* text_primary */
-  font-size: 20px;
-  font-weight: bold;
+  background-color: #be1adb;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s;
 
   &:hover {
     transform: scale(1.1);
-    background-color: #9b12af; /* Slightly darker primary */
+    background-color: #9b12af;
   }
 `;
 
 const SkipButton = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 37px;
+  height: 37px;
   border-radius: 50%;
-  background-color: #5c5b5b; /* button */
-  color: #f2f3f4; /* text_primary */
-  font-size: 16px;
-  font-weight: bold;
+  background-color: #5c5b5b;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s;
 
   &:hover {
     transform: scale(1.1);
-    background-color: #4c4b4b; /* Slightly darker button */
+    background-color: #4c4b4b;
   }
 `;
 
 const ImageBox = styled.div`
   width: 170px;
   height: 170px;
-  background-color: #121212; /* card */
+  background-color: #121212;
   border-radius: 10px;
-  border: 2px solid #be1adb; /* primary */
+  border: 2px solid #be1adb;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 `;
 
@@ -114,7 +113,7 @@ const SoundBars = styled.div`
   height: 170px;
   width: 170px;
   border-radius: 10px;
-  background: #15171e; /* bg */
+  background: #15171e;
 `;
 
 const soundAnimation = keyframes`
@@ -130,10 +129,11 @@ const Bar = styled.div`
   animation: ${soundAnimation} 0ms ${({ index }) => -index * 100}ms linear infinite alternate;
   animation-duration: ${({ index }) => 400 + index * 50}ms;
 `;
+
 const InnerBox = styled.div`
   width: 170px;
   height: 170px;
-  background-color: #1c1e27; /* bgLight */
+  background-color: #1c1e27;
   border-radius: 10px;
   display: flex;
   justify-content: center;

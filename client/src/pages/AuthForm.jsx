@@ -1,7 +1,29 @@
-import  { useState } from 'react';
-import styled from 'styled-components';
-import axiosInstance from '../utils/axiosInstance';
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { useAuth } from '../context/authContext';
+import { X } from 'lucide-react'; // Import the close icon from lucide-react
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const slideIn = keyframes`
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
 
 const AuthForm = ({ handleLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,7 +33,8 @@ const AuthForm = ({ handleLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-const {user,signup,login}=useAuth();
+  const { signup, login } = useAuth();
+
   const validateForm = () => {
     if (!userName || !password || (!isLogin && !email) || (!isLogin && !confirmPassword)) {
       setErrorMessage('Please fill out all fields.');
@@ -38,15 +61,10 @@ const {user,signup,login}=useAuth();
 
     try {
       if (isLogin) {
-        await login({ userName, password })
-
-        
+        await login({ userName, password });
       } else {
-        await signup({userName, email, password })
-       
+        await signup({ userName, email, password });
       }
-
-   
 
       alert(`${isLogin ? 'Login' : 'Signup'} successful!`);
 
@@ -72,7 +90,9 @@ const {user,signup,login}=useAuth();
   return (
     <Container>
       <Card>
-        <CloseButton onClick={handleLogin}>&times;</CloseButton>
+        <CloseButton onClick={handleLogin}>
+          <X size={20} /> {/* Use the X icon from lucide-react */}
+        </CloseButton>
         <Title>{isLogin ? 'Login' : 'Signup'}</Title>
         <form onSubmit={handleSubmit}>
           <InputContainer>
@@ -130,7 +150,6 @@ const {user,signup,login}=useAuth();
 
 export default AuthForm;
 
-
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -158,33 +177,40 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
-  background-color:transparent;
-
-  @media (max-width: 768px) {
-    padding: 5px;
-    width: 200px;
-  }
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: ${fadeIn} 0.3s ease-in-out;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
+
   padding: 30px;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 200px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  height:500px;
   position: relative;
+  animation: ${slideIn} 0.3s ease-in-out;
 
   @media (max-width: 768px) {
-    width: 190px;
+    width: 90%;
+    padding: 20px;
+
   }
 `;
 
 const Title = styled.h2`
   text-align: center;
   margin-bottom: 20px;
+  color: #333;
 `;
 
 const InputContainer = styled.div`
@@ -195,31 +221,21 @@ const InputContainer = styled.div`
 
 const InputLabel = styled.label`
   margin-bottom: 5px;
+  color: #555;
 `;
 
 const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+
   &:focus {
     outline: none;
-    border-color: #999;
+    border-color: #8e47f1;
   }
 `;
-
-// const Button = styled.button`
-//   padding: 10px 20px;
-//   border: none;
-//   border-radius: 3px;
-//   background-color: #8e47f1;
-//   color: white;
-//   cursor: pointer;
-//   transition: background-color 0.2s ease-in-out;
-
-//   &:hover {
-//     background-color: #be1adb;
-//   }
-// `;
 
 const ToggleButton = styled.button`
   padding: 10px;
@@ -229,6 +245,12 @@ const ToggleButton = styled.button`
   cursor: pointer;
   margin-top: 10px;
   text-align: center;
+  font-size: 14px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #7a3ed0;
+  }
 `;
 
 const ErrorMessage = styled.p`
@@ -239,36 +261,17 @@ const ErrorMessage = styled.p`
 `;
 
 const CloseButton = styled.button`
-  color: black;
   position: absolute;
-  top: 10px;
-  right: 20px;
+  top: 15px;
+  right: 15px;
   padding: 5px;
   border: none;
   background-color: transparent;
   cursor: pointer;
+  color: #555;
+  transition: color 0.3s ease;
 
-  @media (max-width:420px) {
-    right: 25px;
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    width: 15px;
-    height: 2px;
-    background-color: #ccc;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  &::before {
-    transform: rotate(45deg);
-  }
-
-  &::after {
-    transform: rotate(-45deg);
+  &:hover {
+    color: #333;
   }
 `;

@@ -3,20 +3,22 @@ const bcrypt = require("bcrypt");
 const genrateToken = require("../utils/genrateToken");
 const jwt =require("jsonwebtoken")
 const signup = async (req, res, next) => {
+  
   const { userName, email, password } = req.body;
   try {
-    let user = await UserSchema.findOne({ email });
-    if (user) {
+    let Email = await UserSchema.findOne({ email });
+    if (Email) {
       return res
         .status(401)
         .json({ message: "already existing email and user " });
     }
-    hashedPassword = await bcrypt.hash(password, 10);
-    user = await new UserSchema({
+    const hashedPassword = await bcrypt.hash(password, 10);
+    let user = await new UserSchema({
       userName,
       email,
       password: hashedPassword,
-    }).save();
+    })
+    await user.save();
     let token = genrateToken(user);
     // In your signup/login controller
     res

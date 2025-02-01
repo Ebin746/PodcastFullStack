@@ -7,6 +7,7 @@ export const AudioProvider = ({ children }) => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // Play or pause audio
   const audioPlay = (id, src) => {
     if (id === currentlyPlaying) {
       audioRef.current.pause();
@@ -23,6 +24,19 @@ export const AudioProvider = ({ children }) => {
     }
   };
 
+  const skipForward = () => {
+    if (audioRef.current) {
+      const newTime = Math.min(audioRef.current.currentTime + 20, audioRef.current.duration);
+      audioRef.current.currentTime = newTime;
+    }
+  };
+  
+  const skipBackward = () => {
+    if (audioRef.current) {
+      const newTime = Math.max(audioRef.current.currentTime - 20, 0);
+      audioRef.current.currentTime = newTime;
+    }
+  };
   useEffect(() => {
     // Handle 'ended' event to reset the state when audio ends
     const handleEnded = () => {
@@ -42,7 +56,9 @@ export const AudioProvider = ({ children }) => {
   }, []);
 
   return (
-    <AudioContext.Provider value={{ isPlaying, currentlyPlaying, audioPlay }}>
+    <AudioContext.Provider
+      value={{ isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward }}
+    >
       {children}
     </AudioContext.Provider>
   );

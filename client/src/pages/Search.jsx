@@ -224,6 +224,7 @@ const SearchContainer = styled.div`
     cursor: pointer;
     @media (max-width: 470px) {
       margin: 0px 4px 2px 10px;
+      animation: ${gradientAnimation} 10s linear infinite;
       text-align: start;
       font-size: 1.4em;
     }
@@ -247,7 +248,7 @@ const SearchInput = styled.input`
   box-shadow: 0 0 25px 0 ${({ theme }) => theme.primary},
     0 20px 25px 0 rgba(0, 0, 0, 0.2);
 
-  transition: all 1s;
+  transition: all 2s;
 
   &:hover {
     cursor: pointer;
