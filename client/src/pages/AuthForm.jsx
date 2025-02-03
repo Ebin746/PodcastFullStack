@@ -91,7 +91,7 @@ const AuthForm = ({ handleLogin }) => {
     <Container>
       <Card>
         <CloseButton onClick={handleLogin}>
-          <X size={20} /> {/* Use the X icon from lucide-react */}
+          <X size={20} />
         </CloseButton>
         <Title>{isLogin ? 'Login' : 'Signup'}</Title>
         <form onSubmit={handleSubmit}>
@@ -152,7 +152,7 @@ export default AuthForm;
 
 const Button = styled.button`
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #8e47f1;
   color: #fff;
   border: none;
@@ -190,20 +190,18 @@ const Container = styled.div`
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-
-  padding: 30px;
-  border-radius: 10px;
+  padding: 40px;
+  border-radius: 12px;
   background-color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  height:500px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  height: 500px;
   position: relative;
   animation: ${slideIn} 0.3s ease-in-out;
 
   @media (max-width: 768px) {
-    width: 90%;
-    padding: 20px;
-
+    width: 85%;
+    padding: 25px;
   }
 `;
 
@@ -211,24 +209,27 @@ const Title = styled.h2`
   text-align: center;
   margin-bottom: 20px;
   color: #333;
+  font-size: 24px;
+  font-weight: 600;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 `;
 
 const InputLabel = styled.label`
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   color: #555;
+  font-size: 14px;
 `;
 
 const Input = styled.input`
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 16px;
   transition: border-color 0.3s ease;
 
   &:focus {
@@ -238,14 +239,15 @@ const Input = styled.input`
 `;
 
 const ToggleButton = styled.button`
-  padding: 10px;
+  padding: 12px;
   border: none;
   background-color: transparent;
   color: #8e47f1;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 0px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   transition: color 0.3s ease;
 
   &:hover {
@@ -256,7 +258,7 @@ const ToggleButton = styled.button`
 const ErrorMessage = styled.p`
   color: red;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 12px 0;
   text-align: center;
 `;
 
@@ -264,7 +266,7 @@ const CloseButton = styled.button`
   position: absolute;
   top: 15px;
   right: 15px;
-  padding: 5px;
+  padding: 8px;
   border: none;
   background-color: transparent;
   cursor: pointer;

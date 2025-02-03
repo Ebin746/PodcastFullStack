@@ -38,7 +38,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    console.log("trigered")
+ 
     const { userName, password } = req.body;
     const user = await UserSchema.findOne({ userName }).select(-"password");
     if (!user) {

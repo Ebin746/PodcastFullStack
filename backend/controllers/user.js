@@ -49,9 +49,6 @@ const getAllFavoritePodcast = async (req, res, next) => {
     // Respond with the user's favorite podcasts
     return res.status(200).json(user.favarates);
   } catch (error) {
-    // Log the error for debugging purposes
-    console.error("Error fetching favorite podcasts:", error);
-    // Pass the error to the global error handler
     next(error);
   }
 };

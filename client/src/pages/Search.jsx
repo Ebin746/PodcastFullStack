@@ -101,7 +101,10 @@ const Search = () => {
           />
           <SearchIcon className="search" onClick={handleSearch} />
         </SearchBar>
-
+        {loading && <Loading />}
+        {error && (
+            <p style={{ backgroundColor: "red" ,margin:"auto"}}>Error occured on Searching</p>
+          )}
         <SuggestionsContainer>
           {suggestions.length !== 0 &&
             suggestions?.map((suggestion) => (
@@ -113,19 +116,17 @@ const Search = () => {
               </SuggestionItem>
             ))}
         </SuggestionsContainer>
-
+        
         <SectionWrapper>
-          {loading && <Loading />}
-          {error && (
-            <p style={{ backgroundColor: "red" }}>Error occured on Searching</p>
-          )}
+          
+        
           {results.map((e, i) => (
             <HashLink
               key={i}
               to={`/#${e.title.toLowerCase()}`}
               style={{ textDecoration: "none" }}
             >
-              <Sections color={"green"}>
+              <Sections uniqueStyle={i % 2 === 0 ? "blue" : "orange"}>
                 <PodcastPic>
                   <img
                     src="/images/podcast-neon-signs-style-text-free-vector.jpg"
@@ -223,7 +224,7 @@ const SearchContainer = styled.div`
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
     @media (max-width: 470px) {
-      margin: 0px 4px 2px 10px;
+      margin: 0px 6px 2px 10px;
       animation: ${gradientAnimation} 10s linear infinite;
       text-align: start;
       font-size: 1.4em;
@@ -297,17 +298,27 @@ const SectionWrapper = styled.div`
 `;
 
 const Sections = styled.div`
-  border-radius: 10px; // Slightly rounded corners
+  border-radius: 10px;
   height: 120px;
-  width: calc(100% - 10px); // Adjust width to allow for margin
-  background-color: violet;
+  width: 400px;
+  
+  background-color: ${({ uniqueStyle }) =>
+    uniqueStyle === "blue" ? "#007bff" : "#ff7f0e"};
   display: flex;
   flex-direction: row;
   margin: 10px 0;
-  padding: 10px; // Add padding for inner spacing
+  padding: 10px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+  }
 
   @media (max-width: 720px) {
-    width: calc(100% - 10px); // Full width on smaller screens
+    max-width: 250px; // Full width on smaller screens
   }
 `;
 
@@ -347,7 +358,7 @@ const PodcastTitle = styled.div`
   justify-content: center;
   align-items: center;
   p {
-    font-size: 60px;
+    font-size: 40px;
     display: inline-block;
     font-weight: 600;
 

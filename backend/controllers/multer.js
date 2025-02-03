@@ -10,7 +10,7 @@ cloudinary.config({
 const fileUpload = (req, res, next) => {
   try {
     if (!req.file) {
-      return res.status(500).json({ message: "No file found" });
+      return res.status(400).json({ message: "No file found" });
     }
     console.log("Received file: ", req.file);
 

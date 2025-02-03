@@ -18,7 +18,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 app.use(cors({
-  origin: ["https://podcasto.netlify.app", "http://localhost:5173/"],
+  origin: ["https://podcasto.netlify.app", "http://localhost:5173"],
   credentials:true
 }));
 app.use('/uploads',express.static(uploadDir));
@@ -41,5 +41,5 @@ app.use((error, req, res, next) => {
 const PORT = 3000 || process.env.PORT;
 app.listen(PORT, () => {
   dataBaseConnection();
-  console.log("server started", PORT);
+  console.log("server started:", PORT);
 });
