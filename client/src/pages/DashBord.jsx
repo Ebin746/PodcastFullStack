@@ -5,13 +5,17 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 import Loading from "../components/Loading";
+
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
   const { isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward } = useAudio();
-  const [isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Existing function for fetching podcasts.
+  // We comment out the isLoading calls so that our global loading state is not overridden.
   const fetchPodcasts = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       let response = await axiosInstance.get("/podcast");
       setPodcastDetails(response.data);
@@ -19,70 +23,80 @@ const DashBord = () => {
     } catch (error) {
       console.log(error);
     }
-    finally{
-      setIsLoading(false);
-    }
+    // finally {
+    //   setIsLoading(false);
+    // }
   };
 
+  // Existing function for fetching favorite podcasts.
+  // Again, we comment out the isLoading state updates.
   const isFavorite = async () => {
+    // setIsLoading(true);
     try {
-      setIsLoading(true)
       const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
-      
-    setFavPodcasts(favId);
-      
+      setFavPodcasts(favId);
     } catch (error) {
       console.log(error);
     }
-    finally{
-      setIsLoading(false);
-    }
+    // finally {
+    //   setIsLoading(false);
+    // }
   };
 
+  // New combined data fetch to run both API calls in parallel.
   useEffect(() => {
-    isFavorite();
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // Both API calls run concurrently.
+        await Promise.all([isFavorite(), fetchPodcasts()]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    fetchPodcasts();
-
+    fetchData();
   }, []);
 
-
   return (
-    isLoading?(<Loading/>):(
-    <MainDashBoard>
-      {podcastDetails?.map((category, i) => (
-        
-        <Filter key={i} id={category._id}>
-          <Topic>
-            {category.name.toLocaleUpperCase()}
-            <Link className="categorys" to={"#"}>
-              <span>Show all</span>
-            </Link>
-          </Topic>
-          <PodCast>
-            {category?.podcasts?.map((podcast, j) => (
-              
-              <PodcastCard
-                key={j}
-                id={podcast._id}
-                title={podcast.title}
-                about={podcast.about}
-                creator={podcast.creator?.name}
-                views={podcast.views}
-                state={favPodcasts.includes(podcast._id.toString())}
-                skipForward={skipForward}
-                skipBackward={skipBackward} 
-                onPlay={audioPlay}
-                isPlaying={isPlaying} 
-                currentlyPlaying={currentlyPlaying}
-                audioSrc={podcast.src}
-              />
-            ))}
-          </PodCast>
-        </Filter>
-      ))}
-    </MainDashBoard>)
+    isLoading ? (
+      <Loading />
+    ) : (
+      <MainDashBoard>
+        {podcastDetails?.map((category, i) => (
+          <Filter key={i} id={category._id}>
+            <Topic>
+              {category.name.toLocaleUpperCase()}
+              <Link className="categorys" to={"#"}>
+                <span>Show all</span>
+              </Link>
+            </Topic>
+            <PodCast>
+              {category?.podcasts?.map((podcast, j) => (
+                <PodcastCard
+                  key={j}
+                  id={podcast._id}
+                  title={podcast.title}
+                  about={podcast.about}
+                  creator={podcast.creator?.name}
+                  views={podcast.views}
+                  state={favPodcasts.includes(podcast._id.toString())}
+                  skipForward={skipForward}
+                  skipBackward={skipBackward}
+                  onPlay={audioPlay}
+                  isPlaying={isPlaying}
+                  currentlyPlaying={currentlyPlaying}
+                  audioSrc={podcast.src}
+                />
+              ))}
+            </PodCast>
+          </Filter>
+        ))}
+      </MainDashBoard>
+    )
   );
 };
 

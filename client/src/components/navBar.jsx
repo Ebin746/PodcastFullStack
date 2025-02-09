@@ -3,8 +3,7 @@ import styled from "styled-components";
 import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { useAuth } from "../context/authContext";
-import { useEffect } from "react";
-import axiosInstance from "../utils/axiosInstance";
+
 const NavBar = ({ toggle, handleLogin }) => {
 const {user}=useAuth();
  
