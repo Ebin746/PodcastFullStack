@@ -5,6 +5,8 @@ import axiosInstance from '../utils/axiosInstance'
 import { useAudio } from '../context/audioContext'
 import { useAuth } from '../context/authContext'
 import Loading from "../components/Loading"
+import { toast } from 'react-toastify';  // Import Toast
+import 'react-toastify/dist/ReactToastify.css';  // Import style
 const Favorite = () => {
   const { user: userId } = useAuth();
   const { isPlaying, audioPlay, currentlyPlaying } = useAudio();
@@ -13,12 +15,16 @@ const Favorite = () => {
   const [error, setError] = useState(null);  // Added error state
 
   // Fetch favorite podcasts
+  const toastId="dsadadsad";
   const fetchFavorites = async () => {
+    
     if (!userId) {
-      alert("Please log in to see your favorite podcasts.");
+      console.log("toast")
+      if (!toast.isActive(toastId)) {  // Prevent duplicate toasts
+        toast.warn("Please log in to see your favorite podcasts.", { toastId, position: "top-right" });
+      }
       return;
     }
-
     try {
       setLoading(true);  // Start loading
       const res = await axiosInstance.get(`/user/fav`);

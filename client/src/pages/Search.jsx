@@ -5,6 +5,8 @@ import { HashLink } from "react-router-hash-link";
 import axiosInstance from "../utils/axiosInstance";
 import debounce from "lodash/debounce";
 import Loading from "../components/Loading";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -15,8 +17,10 @@ const Search = () => {
 
   const handleSearch = async () => {
     if (!query.trim()) {
-      // Optional: Handle empty query
-      alert("Please enter a search term.");
+      const toastId = "empty-search"; // Unique ID for toast
+      if (!toast.isActive(toastId)) { 
+        toast.warn("Please enter a search term.", { toastId, position: "top-right" });
+      }
       return;
     }
 

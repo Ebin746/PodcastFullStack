@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useAuth } from '../context/authContext';
 import { X } from 'lucide-react'; // Import the close icon from lucide-react
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const fadeIn = keyframes`
   from {
@@ -66,7 +68,10 @@ const AuthForm = ({ handleLogin }) => {
         await signup({ userName, email, password });
       }
 
-      alert(`${isLogin ? 'Login' : 'Signup'} successful!`);
+      const toastId = "auth-success";
+      if (!toast.isActive(toastId)) {
+        toast.success(`${isLogin ? 'Login' : 'Signup'} successful!`, { toastId, position: "top-right" });
+      }
 
       setUserName('');
       setEmail('');
