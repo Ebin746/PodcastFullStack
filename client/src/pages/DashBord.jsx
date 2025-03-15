@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 import Loading from "../components/Loading";
-
+import { useAuth } from "../context/authContext";
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
   const { isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward } = useAudio();
   const [isLoading, setIsLoading] = useState(false);
-
+  const {fetchUser} =useAuth()
   // Existing function for fetching podcasts.
   // We comment out the isLoading calls so that our global loading state is not overridden.
   const fetchPodcasts = async () => {
@@ -23,9 +23,7 @@ const DashBord = () => {
     } catch (error) {
       console.log(error);
     }
-    // finally {
-    //   setIsLoading(false);
-    // }
+
   };
 
   // Existing function for fetching favorite podcasts.
@@ -39,9 +37,7 @@ const DashBord = () => {
     } catch (error) {
       console.log(error);
     }
-    // finally {
-    //   setIsLoading(false);
-    // }
+
   };
 
   // New combined data fetch to run both API calls in parallel.
@@ -49,17 +45,17 @@ const DashBord = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Both API calls run concurrently.
-        await Promise.all([isFavorite(), fetchPodcasts()]);
+        await Promise.all([isFavorite(), fetchUser(), fetchPodcasts()]);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   return (
     isLoading ? (
@@ -71,7 +67,7 @@ const DashBord = () => {
             <Topic>
               {category.name.toLocaleUpperCase()}
               <Link className="categorys" to={"#"}>
-                <span>Show all</span>
+
               </Link>
             </Topic>
             <PodCast>

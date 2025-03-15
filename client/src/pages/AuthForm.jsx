@@ -72,6 +72,7 @@ const AuthForm = ({ handleLogin }) => {
       if (!toast.isActive(toastId)) {
         toast.success(`${isLogin ? 'Login' : 'Signup'} successful!`, { toastId, position: "top-right" });
       }
+      setTimeout(()=>{window.location.reload},500)
 
       setUserName('');
       setEmail('');
@@ -79,6 +80,8 @@ const AuthForm = ({ handleLogin }) => {
       setConfirmPassword('');
 
       handleLogin();
+
+    
     } catch (error) {
       console.error('Authentication Error:', error);
       setErrorMessage(error.response?.data?.message || 'An unexpected error occurred. Please try again.');

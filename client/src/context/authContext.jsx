@@ -23,9 +23,6 @@ export const AuthProvider = ({ children }) => {
   };
   
 
-  useEffect(() => {
-    fetchUser(); // Call fetchUser only once on component mount
-  }, [])
 
   
 
@@ -69,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, login, signup, logout,setUser }}
+      value={{ user, isLoading, login, signup, logout,setUser,fetchUser }}
     >
       {children}
     </AuthContext.Provider>
