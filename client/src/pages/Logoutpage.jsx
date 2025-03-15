@@ -1,6 +1,7 @@
-import  { useEffect } from 'react';
-import styled from 'styled-components';
 
+import styled from 'styled-components';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from '../context/authContext';
 const LogoutCard = ({ handleLogout}) => {
    const {logout,user}=useAuth()
@@ -8,6 +9,8 @@ const LogoutCard = ({ handleLogout}) => {
         console.log(user)
         try {
           await logout();
+
+toast.success("Logged out successfully!"); // ✅ Success toast
         } catch (error) {
           console.error(error)
         } 
