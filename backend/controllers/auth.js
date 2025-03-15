@@ -72,9 +72,9 @@ const logout = async (req, res, next) => {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use secure in production
-      sameSite: "Strict",
+      sameSite: "None",
       path: "/",
-       domain: "yourdomain.com"  // Only set domain in production
+      ...(process.env.NODE_ENV === "production" && { domain: "yourdomain.com" }) // Only set domain in production
     });
 
     res.status(200).json({ message: "Logged out successfully" });
