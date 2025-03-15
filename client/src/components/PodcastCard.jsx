@@ -90,7 +90,7 @@ const PodcastCard = ({
                 <Profile className="Profile">{creator.toString().charAt(0)}</Profile>
                 <Name>{creator}</Name>
               </Creators>
-              <Views>{views}</Views>
+          
             </CreatorsInfo>
           </MainInfo>
         </CardDetails>
