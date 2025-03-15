@@ -9,18 +9,19 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Initialize user as null to avoid undefined issues
   const [isLoading, setIsLoading] = useState(true); // Set loading initially to true
   const fetchUser = async () => {
-    try {
-        setIsLoading(true)
-      const { data } = await axiosInstance.get("/user");
-      console.log("data", data); // Debugging line
-      setUser(data.user);
-    } catch (error) {
-      console.error("Error fetching user:", error); // Log error for debugging
-      setUser(null);
-    }finally{
-        setIsLoading(false)
+    if (!user) {  // Avoid redundant requests if user is already set
+      try {
+        setIsLoading(true);
+        const { data } = await axiosInstance.get("/user", { withCredentials: true });
+        setUser(data.user);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
+  
 
   useEffect(() => {
     fetchUser(); // Call fetchUser only once on component mount
@@ -34,7 +35,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await axiosInstance.post("/login", credentials);
       console.log(data);
-      setUser(data.user); // Assuming the backend returns { user: userData }
+      setUser(data.user);
+       // Assuming the backend returns { user: userData }
     } catch (error) {
       setUser(null); // If login fails, set user to null
       console.error("Login failed", error);
