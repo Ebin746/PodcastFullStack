@@ -83,15 +83,15 @@ const logout = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const token = req.cookies.token; // Retrieve the token from the cookie
+    const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ message: "No token found" });
     }
 
-  
-    const decoded = jwt.verify(token,process.env.JWT_SECRET);
-    
-    const user = await UserSchema.findById(decoded.id).select("-password"); // Fetch user without password
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Use `lean()` for better performance (faster query execution)
+    const user = await UserSchema.findById(decoded.id).select("-password").lean();
     
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -99,9 +99,7 @@ const getUser = async (req, res, next) => {
 
     res.status(200).json({ user });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch user", error: error.message });
+    res.status(500).json({ message: "Failed to fetch user", error: error.message });
   }
 };
 
