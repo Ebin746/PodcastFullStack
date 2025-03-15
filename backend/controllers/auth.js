@@ -74,7 +74,7 @@ const logout = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production", // Use secure in production
       sameSite: "Strict",
       path: "/",
-      ...(process.env.NODE_ENV === "production" && { domain: "yourdomain.com" }) // Only set domain in production
+       domain: "yourdomain.com"  // Only set domain in production
     });
 
     res.status(200).json({ message: "Logged out successfully" });
