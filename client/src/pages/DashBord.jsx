@@ -45,7 +45,7 @@ const DashBord = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        await Promise.all([isFavorite(), fetchUser(), fetchPodcasts()]);
+        await Promise.all([isFavorite(), fetchPodcasts()]);
       } catch (error) {
         console.log(error);
       } finally {

@@ -1,101 +1,85 @@
 const UserSchema = require("../Schema/user");
 const bcrypt = require("bcrypt");
-const genrateToken = require("../utils/genrateToken");
-const jwt =require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+// Function to generate JWT
+const generateToken = (user) => {
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d", // Token expires in 7 days
+  });
+};
+
+// Signup Function
 const signup = async (req, res, next) => {
-  
   const { userName, email, password } = req.body;
   try {
-    let Email = await UserSchema.findOne({ email });
-    if (Email) {
-      return res
-        .status(401)
-        .json({ message: "already existing email and user " });
+    let existingUser = await UserSchema.findOne({ email });
+    if (existingUser) {
+      return res.status(401).json({ message: "Email already exists" });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    let user = await new UserSchema({
+    let user = new UserSchema({
       userName,
       email,
       password: hashedPassword,
-    })
-    await user.save();
-    let token = genrateToken(user);
-    // In your signup/login controller
-    res
-      .status(200)
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // true in production
-        sameSite: "None", // Required for cross-origin authentication
-        path: "/", 
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-      })
-      .json({ message: "Authentication successful", user });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const login = async (req, res, next) => {
-  try {
- 
-    const { userName, password } = req.body;
-    const user = await UserSchema.findOne({ userName }).select(-"password");
-    if (!user) {
-      return res
-        .status(404)
-        .json({ messgae: " not found the data on userName:", userName });
-    }
-    const realPassword = await bcrypt.compare(password, user.password);
-    if (!realPassword) {
-      return res.status(404).json({ message: "not matching password" });
-    }
-    let token = genrateToken(user);
-    // In your signup/login controller
-    res
-      .status(200)
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // true in production
-        sameSite: "None", // Required for cross-origin authentication
-        path: "/", 
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-      })
-      .json({ message: "Authentication successful", user });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const logout = async (req, res, next) => {
-  try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure in production
-      sameSite: "None",
-      path: "/",
-      domain: "yourdomain.com"
     });
 
+    await user.save();
+    let token = generateToken(user);
+
+    res.status(200).json({ message: "Signup successful", user, token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Login Function
+const login = async (req, res, next) => {
+  try {
+    const { userName, password } = req.body;
+
+    const user = await UserSchema.findOne({ userName });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    let token = generateToken(user);
+    res.status(200).json({ message: "Login successful", user, token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Logout Function (Frontend handles token removal)
+const logout = async (req, res, next) => {
+  try {
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     next(error);
   }
 };
 
-
+// Get User Function
 const getUser = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ message: "No token found" });
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Use `lean()` for better performance (faster query execution)
     const user = await UserSchema.findById(decoded.id).select("-password").lean();
-    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
