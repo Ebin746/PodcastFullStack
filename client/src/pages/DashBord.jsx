@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 import Loading from "../components/Loading";
-import { useAuth } from "../context/authContext";
+
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
   const [favPodcasts, setFavPodcasts] = useState([]);
-  const { isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward } = useAudio();
+  const { isPlaying, currentlyPlaying, audioPlay, skipForward, skipBackward } =
+    useAudio();
   const [isLoading, setIsLoading] = useState(false);
-  const {fetchUser} =useAuth()
+
   // Existing function for fetching podcasts.
   // We comment out the isLoading calls so that our global loading state is not overridden.
   const fetchPodcasts = async () => {
@@ -23,23 +24,19 @@ const DashBord = () => {
     } catch (error) {
       console.log(error);
     }
-
   };
-
-  // Existing function for fetching favorite podcasts.
-  // Again, we comment out the isLoading state updates.
   const isFavorite = async () => {
     // setIsLoading(true);
     try {
+      const token=localStorage.getItem("token");
+      if(!token) return;
       const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
       setFavPodcasts(favId);
     } catch (error) {
       console.log(error);
     }
-
   };
-
   // New combined data fetch to run both API calls in parallel.
   useEffect(() => {
     const fetchData = async () => {
@@ -52,47 +49,42 @@ const DashBord = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
-  return (
-    isLoading ? (
-      <Loading />
-    ) : (
-      <MainDashBoard>
-        {podcastDetails?.map((category, i) => (
-          <Filter key={i} id={category._id}>
-            <Topic>
-              {category.name.toLocaleUpperCase()}
-              <Link className="categorys" to={"#"}>
-
-              </Link>
-            </Topic>
-            <PodCast>
-              {category?.podcasts?.map((podcast, j) => (
-                <PodcastCard
-                  key={j}
-                  id={podcast._id}
-                  title={podcast.title}
-                  about={podcast.about}
-                  creator={podcast.creator?.name}
-                  views={podcast.views}
-                  state={favPodcasts.includes(podcast._id.toString())}
-                  skipForward={skipForward}
-                  skipBackward={skipBackward}
-                  onPlay={audioPlay}
-                  isPlaying={isPlaying}
-                  currentlyPlaying={currentlyPlaying}
-                  audioSrc={podcast.src}
-                />
-              ))}
-            </PodCast>
-          </Filter>
-        ))}
-      </MainDashBoard>
-    )
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <MainDashBoard>
+      {podcastDetails?.map((category, i) => (
+        <Filter key={i} id={category._id}>
+          <Topic>
+            {category.name.toLocaleUpperCase()}
+            <Link className="categorys" to={"#"}></Link>
+          </Topic>
+          <PodCast>
+            {category?.podcasts?.map((podcast, j) => (
+              <PodcastCard
+                key={j}
+                id={podcast._id}
+                title={podcast.title}
+                about={podcast.about}
+                creator={podcast.creator?.name}
+                views={podcast.views}
+                state={favPodcasts.includes(podcast._id.toString())}
+                skipForward={skipForward}
+                skipBackward={skipBackward}
+                onPlay={audioPlay}
+                isPlaying={isPlaying}
+                currentlyPlaying={currentlyPlaying}
+                audioSrc={podcast.src}
+              />
+            ))}
+          </PodCast>
+        </Filter>
+      ))}
+    </MainDashBoard>
   );
 };
 

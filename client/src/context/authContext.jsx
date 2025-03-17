@@ -6,10 +6,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch User from JWT stored in localStorage
   const fetchUser = async () => {
-    const token = localStorage.getItem("token"); // Get the token from localStorage
+    const token = localStorage.getItem("token"); 
     if (!token) {
       setUser(null);
       setIsLoading(false);
@@ -25,21 +23,20 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Fetching user failed", error);
       setUser(null);
-      localStorage.removeItem("token"); // Remove invalid token
+      localStorage.removeItem("token");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUser(); // Fetch user on app load
+    fetchUser();
   }, []);
 
-  // Login function
   const login = async (credentials) => {
     try {
       const { data } = await axiosInstance.post("/login", credentials);
-      localStorage.setItem("token", data.token); // Store JWT in localStorage
+      localStorage.setItem("token", data.token); 
       setUser(data.user);
     } catch (error) {
       setUser(null);
@@ -48,7 +45,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Signup function
   const signup = async (credentials) => {
     try {
       const { data } = await axiosInstance.post("/signup", credentials);
@@ -59,13 +55,10 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
-
-  // Logout function
   const logout = () => {
-    localStorage.removeItem("token"); // Remove token from storage
+    localStorage.removeItem("token"); 
     setUser(null);
   };
-
   return (
     <AuthContext.Provider
       value={{ user, isLoading, login, signup, logout, fetchUser }}
@@ -74,5 +67,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
 export const useAuth = () => useContext(AuthContext);
