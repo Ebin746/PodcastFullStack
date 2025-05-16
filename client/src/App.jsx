@@ -10,7 +10,7 @@ import Favorite from "./pages/Favorite.jsx";
 import AuthForm from "./pages/AuthForm.jsx";
 import LogoutCard from "./pages/Logoutpage.jsx";
 import PodcastUpload from "./components/PodcastUpload.jsx";
-import PlayFrame from "./components/PlayFrame.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
 const App = () => {
   const [darkMod, setDarkMod] = useState(true);
@@ -68,7 +68,7 @@ console.log("clicked logout");
               <Route path="/upload" element={<PodcastUpload/>}/>
               <Route path="/search" element={<Search />} />
               <Route path="/favorite" element={<Favorite />} />
-              <Route path='/test' element={<PlayFrame/>}/>
+              <Route path='/profile' element={<UserProfile/>}/>
             </Routes>
           </Frame>
         </Container>

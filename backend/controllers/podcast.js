@@ -84,18 +84,37 @@ const getPodcast = async (req, res, next) => {
     next(error);
   }
 };
+
+
 const deletePodcast = async (req, res, next) => {
   try {
-    let { podcastId, categoryId } = req.params.id;
-    let data = await PodcastSchema.findOneAndDelete(podcastId);
-    await CategorySchema.findByIdAndUpdate(categoryId, {
-      $pull: { podcasts: podcastId },
-    });
-    res.status(200).json({ message: "The podcast has been deleted ", data });
+    const { podcastId } = req.params;
+
+    // 1. Delete podcast document
+    const deletedPodcast = await PodcastSchema.findOneAndDelete({ _id: podcastId });
+    if (!deletedPodcast) return res.status(404).json({ message: "Podcast not found" });
+
+    // 2. Remove podcastId from all categories
+    const category = await CategorySchema.findOneAndUpdate(
+      { podcasts: podcastId },
+      { $pull: { podcasts: podcastId } },
+      { new: true }
+    );
+
+    // 3. If the category exists and has no more podcasts, delete the category
+    if (category && category.podcasts.length === 0) {
+      await CategorySchema.deleteOne({ _id: category._id });
+    }
+
+    // 4. Remove podcastId from user's uploads
+    await UserSchema.findByIdAndUpdate(req.id, { $pull: { uploads: podcastId } });
+
+    res.status(200).json({ message: "Podcast and related category (if empty) deleted successfully" });
   } catch (error) {
     next(error);
   }
 };
+
 const updatePodcast = async (req, res, next) => {
   try {
     let id = req.params.id;

@@ -18,7 +18,7 @@ router.get("/suggestions",suggestions)
 router.post("/",authenticationVerify,addPodcast);
 router.get("/", getPodcasts);
 router.get("/:id", getPodcast);
-router.delete("/:podcastId/:categoryId");
-router.put("/:id");
+router.delete("/:podcastId",deletePodcast);
+router.put("/:id",updatePodcast);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Podcast",
     default: [],
-    required:false
+    require:false
   },
 
   uploads: [
