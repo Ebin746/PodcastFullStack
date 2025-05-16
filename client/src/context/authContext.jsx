@@ -8,11 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const fetchUser = async () => {
     const token = localStorage.getItem("token"); 
-    if (!token) {
-      setUser(null);
-      setIsLoading(false);
-      return;
-    }
 
     try {
       setIsLoading(true);
@@ -30,7 +25,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUser();
+        const token = localStorage.getItem("token"); 
+    if (token) {
+          fetchUser();
+    }
   }, []);
 
   const login = async (credentials) => {
@@ -48,6 +46,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (credentials) => {
     try {
       const { data } = await axiosInstance.post("/signup", credentials);
+      console.log(data);
       localStorage.setItem("token", data.token);
       setUser(data.user);
     } catch (error) {

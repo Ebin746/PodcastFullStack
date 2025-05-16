@@ -13,10 +13,9 @@ const DashBord = () => {
     useAudio();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Existing function for fetching podcasts.
-  // We comment out the isLoading calls so that our global loading state is not overridden.
+
   const fetchPodcasts = async () => {
-    // setIsLoading(true);
+
     try {
       let response = await axiosInstance.get("/podcast");
       setPodcastDetails(response.data);
@@ -28,8 +27,7 @@ const DashBord = () => {
   const isFavorite = async () => {
     // setIsLoading(true);
     try {
-      const token=localStorage.getItem("token");
-      if(!token) return;
+
       const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
       setFavPodcasts(favId);
@@ -42,7 +40,13 @@ const DashBord = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+              const token=localStorage.getItem("token");
+      if(token){
         await Promise.all([isFavorite(), fetchPodcasts()]);
+      }else{
+
+        await fetchPodcasts();
+      }
       } catch (error) {
         console.log(error);
       } finally {
