@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
 import { useAudio } from '../context/audioContext'
 import { useAuth } from '../context/authContext'
-import Loading from "../components/Loading"
+import Loading from "../Loading/Loading"
 import { toast } from 'react-toastify';  // Import Toast
 import 'react-toastify/dist/ReactToastify.css';  // Import style
 const Favorite = () => {

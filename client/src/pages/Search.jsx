@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { HashLink } from "react-router-hash-link";
 import axiosInstance from "../utils/axiosInstance";
 import debounce from "lodash/debounce";
-import Loading from "../components/Loading";
+import Loading from "../Loading/Loading";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

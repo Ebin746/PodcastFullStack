@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Loading from "./Loading";
+import Loading from "../Loading/Loading";
 import axiosInstance from "../utils/axiosInstance";
-import ProgressBar from "../components/LoadingBar";
+import ProgressBar from "../Loading/LoadingBar";
 
 const PodcastUpload = () => {
   const [category, setCategory] = useState("");

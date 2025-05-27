@@ -4,7 +4,7 @@ import PodcastCard from "../components/PodcastCard";
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
-import Loading from "../components/Loading";
+import Loading from "../Loading/Card";
 import LandingPage from "../components/LandingPage";
 
 const DashBord = () => {
@@ -54,48 +54,54 @@ const DashBord = () => {
     fetchData();
   }, []);
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <MainContainer>
-      {/* Landing Page Section */}
+      {/* Landing Page Section - Always shows first */}
       <LandingSection>
         <LandingPage />
       </LandingSection>
       
-      {/* Podcast Content Section */}
-      <PodcastContentSection id="podcast-content">
-        <ContentTitle>Featured Podcasts</ContentTitle>
-        <MainDashBoard>
-          {podcastDetails?.map((category, i) => (
-            <Filter key={i} id={category._id}>
-              <Topic>
-                {category.name.toLocaleUpperCase()}
-                <Link className="categorys" to={"#"}></Link>
-              </Topic>
-              <PodCast>
-                {category?.podcasts?.map((podcast, j) => (
-                  <PodcastCard
-                    key={j}
-                    id={podcast._id}
-                    title={podcast.title}
-                    about={podcast.about}
-                    creator={podcast.creator?.name}
-                    views={podcast.views}
-                    state={favPodcasts.includes(podcast._id.toString())}
-                    skipForward={skipForward}
-                    skipBackward={skipBackward}
-                    onPlay={audioPlay}
-                    isPlaying={isPlaying}
-                    currentlyPlaying={currentlyPlaying}
-                    audioSrc={podcast.src}
-                  />
-                ))}
-              </PodCast>
-            </Filter>
-          ))}
-        </MainDashBoard>
-      </PodcastContentSection>
+      {/* Content Section - Shows loading or actual content */}
+      {!isLoading ? (
+        // Loading state with same structure as main content
+        <PodcastContentSection id="podcast-content">
+          <Loading />
+        </PodcastContentSection>
+      ) : (
+        // Actual podcast content
+        <PodcastContentSection id="podcast-content">
+          <ContentTitle>Featured Podcasts</ContentTitle>
+          <MainDashBoard>
+            {podcastDetails?.map((category, i) => (
+              <Filter key={i} id={category._id}>
+                <Topic>
+                  {category.name.toLocaleUpperCase()}
+                  <Link className="categorys" to={"#"}></Link>
+                </Topic>
+                <PodCast>
+                  {category?.podcasts?.map((podcast, j) => (
+                    <PodcastCard
+                      key={j}
+                      id={podcast._id}
+                      title={podcast.title}
+                      about={podcast.about}
+                      creator={podcast.creator?.name}
+                      views={podcast.views}
+                      state={favPodcasts.includes(podcast._id.toString())}
+                      skipForward={skipForward}
+                      skipBackward={skipBackward}
+                      onPlay={audioPlay}
+                      isPlaying={isPlaying}
+                      currentlyPlaying={currentlyPlaying}
+                      audioSrc={podcast.src}
+                    />
+                  ))}
+                </PodCast>
+              </Filter>
+            ))}
+          </MainDashBoard>
+        </PodcastContentSection>
+      )}
     </MainContainer>
   );
 };
@@ -107,6 +113,7 @@ const MainContainer = styled.div`
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
 `;
 
