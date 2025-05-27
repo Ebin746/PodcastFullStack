@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useAudio } from "../context/audioContext";
 import Loading from "../components/Loading";
+import LandingPage from "../components/LandingPage";
 
 const DashBord = () => {
   const [podcastDetails, setPodcastDetails] = useState([]);
@@ -13,9 +14,7 @@ const DashBord = () => {
     useAudio();
   const [isLoading, setIsLoading] = useState(false);
 
-
   const fetchPodcasts = async () => {
-
     try {
       let response = await axiosInstance.get("/podcast");
       setPodcastDetails(response.data);
@@ -24,10 +23,9 @@ const DashBord = () => {
       console.log(error);
     }
   };
-  const isFavorite = async () => {
-    // setIsLoading(true);
-    try {
 
+  const isFavorite = async () => {
+    try {
       const res = await axiosInstance.get(`/user/fav`);
       let favId = res.data.map((item) => item._id);
       setFavPodcasts(favId);
@@ -35,18 +33,17 @@ const DashBord = () => {
       console.log(error);
     }
   };
-  // New combined data fetch to run both API calls in parallel.
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-              const token=localStorage.getItem("token");
-      if(token){
-        await Promise.all([isFavorite(), fetchPodcasts()]);
-      }else{
-
-        await fetchPodcasts();
-      }
+        const token = localStorage.getItem("token");
+        if (token) {
+          await Promise.all([isFavorite(), fetchPodcasts()]);
+        } else {
+          await fetchPodcasts();
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -60,39 +57,84 @@ const DashBord = () => {
   return isLoading ? (
     <Loading />
   ) : (
-    <MainDashBoard>
-      {podcastDetails?.map((category, i) => (
-        <Filter key={i} id={category._id}>
-          <Topic>
-            {category.name.toLocaleUpperCase()}
-            <Link className="categorys" to={"#"}></Link>
-          </Topic>
-          <PodCast>
-            {category?.podcasts?.map((podcast, j) => (
-              <PodcastCard
-                key={j}
-                id={podcast._id}
-                title={podcast.title}
-                about={podcast.about}
-                creator={podcast.creator?.name}
-                views={podcast.views}
-                state={favPodcasts.includes(podcast._id.toString())}
-                skipForward={skipForward}
-                skipBackward={skipBackward}
-                onPlay={audioPlay}
-                isPlaying={isPlaying}
-                currentlyPlaying={currentlyPlaying}
-                audioSrc={podcast.src}
-              />
-            ))}
-          </PodCast>
-        </Filter>
-      ))}
-    </MainDashBoard>
+    <MainContainer>
+      {/* Landing Page Section */}
+      <LandingSection>
+        <LandingPage />
+      </LandingSection>
+      
+      {/* Podcast Content Section */}
+      <PodcastContentSection id="podcast-content">
+        <ContentTitle>Featured Podcasts</ContentTitle>
+        <MainDashBoard>
+          {podcastDetails?.map((category, i) => (
+            <Filter key={i} id={category._id}>
+              <Topic>
+                {category.name.toLocaleUpperCase()}
+                <Link className="categorys" to={"#"}></Link>
+              </Topic>
+              <PodCast>
+                {category?.podcasts?.map((podcast, j) => (
+                  <PodcastCard
+                    key={j}
+                    id={podcast._id}
+                    title={podcast.title}
+                    about={podcast.about}
+                    creator={podcast.creator?.name}
+                    views={podcast.views}
+                    state={favPodcasts.includes(podcast._id.toString())}
+                    skipForward={skipForward}
+                    skipBackward={skipBackward}
+                    onPlay={audioPlay}
+                    isPlaying={isPlaying}
+                    currentlyPlaying={currentlyPlaying}
+                    audioSrc={podcast.src}
+                  />
+                ))}
+              </PodCast>
+            </Filter>
+          ))}
+        </MainDashBoard>
+      </PodcastContentSection>
+    </MainContainer>
   );
 };
 
 export default DashBord;
+
+// Updated Styled Components
+const MainContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+`;
+
+const LandingSection = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: relative;
+`;
+
+const PodcastContentSection = styled.div`
+  min-height: 100vh;
+  background: ${({ theme }) => theme.bg};
+  padding-top: 2rem;
+`;
+
+const ContentTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: ${({ theme }) => theme.text_primary};
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+`;
 
 const MainDashBoard = styled.div`
   margin: 16px;
@@ -100,9 +142,8 @@ const MainDashBoard = styled.div`
   flex-direction: column;
   padding: 10px 20px;
   padding-bottom: 200px;
-  height: 100%;
   gap: 10px;
-  overflow-y: scroll;
+
   @media (max-width: 720px) {
     padding: 6px 10px;
     margin: 8px;
