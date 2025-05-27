@@ -24,7 +24,7 @@ const addPodcast = async (req, res, next) => {
 
     // Save new podcast
     const podcastData = await new PodcastSchema({
-      title,
+      title: title.toUpperCase(),
       about,
       creator: {
         name: creator.name,

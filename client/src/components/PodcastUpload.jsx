@@ -396,10 +396,18 @@ const Form = styled.form`
   padding: 2rem;
   background: ${({ theme }) => theme.bgLight};
   backdrop-filter: blur(20px);
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const FormSection = styled.div`
   margin-bottom: 2.5rem;
+  width: 100%;
+  box-sizing: border-box;
 
   &:last-child {
     margin-bottom: 0;
@@ -419,6 +427,7 @@ const SectionTitle = styled.h3`
 const FormRow = styled.div`
   display: flex;
   gap: 1.5rem;
+  width: 100%;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -429,6 +438,8 @@ const FormRow = styled.div`
 const FormGroup = styled.div`
   flex: ${props => props.flex || '1'};
   margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const Label = styled.label`
@@ -448,6 +459,8 @@ const InputWrapper = styled.div`
     ${({ theme, isFocused }) => (isFocused ? theme.primary : theme.card)};
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     border-color: ${({ theme }) => theme.button};
@@ -461,6 +474,8 @@ const Input = styled.input`
   border: none;
   font-size: 1rem;
   color: ${({ theme }) => theme.text_primary};
+  width: 100%;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -485,6 +500,8 @@ const TextAreaWrapper = styled.div`
     ${({ theme, isFocused }) => (isFocused ? theme.primary : theme.card)};
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     border-color: ${({ theme }) => theme.button};
@@ -501,6 +518,7 @@ const TextArea = styled.textarea`
   resize: vertical;
   min-height: 120px;
   font-family: inherit;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -654,10 +672,16 @@ const FileUploadArea = styled.div`
   text-align: center;
   transition: all 0.3s ease;
   background: ${({ theme }) => theme.bgLight};
+  width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     border-color: ${({ theme }) => theme.primary};
     background: ${({ theme }) => theme.bg};
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
   }
 `;
 
@@ -670,6 +694,8 @@ const FileInputLabel = styled.label`
   padding: ${props => (props.hasFile ? '1rem' : '2rem')};
   border-radius: 12px;
   transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     transform: translateY(-2px);
@@ -803,4 +829,3 @@ const ErrorIcon = styled.span`
 const ErrorText = styled.span`
   flex: 1;
 `;
-// ...existing code...
