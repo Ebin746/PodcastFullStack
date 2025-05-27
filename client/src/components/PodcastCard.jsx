@@ -22,11 +22,11 @@ const PodcastCard = ({
   currentlyPlaying,
 }) => {
   const [isFavorite, setIsFavorite] = useState(state);
-  const { user:userId } = useAuth();
+  const { user: userId } = useAuth();
+  const isCurrentlyPlaying = isPlaying && currentlyPlaying === id;
 
   const makeFavorite = async () => {
     const podcastId = id;
- 
 
     if (!userId) {
       alert("Please login to make favorite");
@@ -51,9 +51,9 @@ const PodcastCard = ({
   };
 
   return (
-    <Card>
-      <Top>
-        {isPlaying && currentlyPlaying === id ? (
+    <Card isPlaying={isCurrentlyPlaying}>
+      {isCurrentlyPlaying ? (
+        <PlayFrameContainer>
           <PlayFrame
             onPlay={onPlay}
             isPlaying={isPlaying}
@@ -62,8 +62,11 @@ const PodcastCard = ({
             skipForward={skipForward}
             skipBackward={skipBackward}
           />
-        ) : (
-          <>
+      
+        </PlayFrameContainer>
+      ) : (
+        <>
+          <Top>
             <FavoriteIconStyled
               className="icons"
               onClick={makeFavorite}
@@ -75,25 +78,22 @@ const PodcastCard = ({
                 <PlayArrowIcon />
               </PlayArrowIconStyled>
             </PlayButtonStyled>
-          </>
-        )}
-      </Top>
-      {isPlaying && currentlyPlaying === id ? (
-        <></>
-      ) : (
-        <CardDetails>
-          <MainInfo>
-            <Title>{title}</Title>
-            <About>{about}</About>
-            <CreatorsInfo>
-              <Creators>
-                <Profile className="Profile">{creator.toString().charAt(0)}</Profile>
-                <Name>{creator}</Name>
-              </Creators>
-          
-            </CreatorsInfo>
-          </MainInfo>
-        </CardDetails>
+          </Top>
+          <CardDetails>
+            <MainInfo>
+              <Title>{title}</Title>
+              <About>{about}</About>
+              <CreatorsInfo>
+                <Creators>
+                  <Profile className="Profile">
+                    {creator.toString().charAt(0)}
+                  </Profile>
+                  <Name>{creator}</Name>
+                </Creators>
+              </CreatorsInfo>
+            </MainInfo>
+          </CardDetails>
+        </>
       )}
     </Card>
   );
@@ -105,24 +105,44 @@ export default PodcastCard;
 const Card = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 8px;
+  border-radius: ${({ isPlaying }) => (isPlaying ? "24px" : "8px")};
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.bg};
+  background: ${({ theme, isPlaying }) => 
+    isPlaying 
+      ? "linear-gradient(145deg, #1a1d29, #0f1117)" 
+      : theme.bg
+  };
   width: 220px;
-  height: 300px;
-  justify-content: space-around;
-  padding: 7px;
-  transition: transform 0.3s ease;
+  height: ${({ isPlaying }) => (isPlaying ? "340px" : "300px")};
+  justify-content: ${({ isPlaying }) => (isPlaying ? "center" : "space-around")};
+  padding: ${({ isPlaying }) => (isPlaying ? "15px" : "7px")};
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ isPlaying }) => 
+    isPlaying 
+      ? `0 8px 32px rgba(0, 0, 0, 0.6),
+         0 2px 8px rgba(0, 0, 0, 0.3),
+         inset 0 1px 0 rgba(255, 255, 255, 0.1)`
+      : "none"
+  };
 
   &:hover {
-    transform: scale(1.05);
+    transform: ${({ isPlaying }) => (isPlaying ? "scale(1.02)" : "scale(1.05)")};
   }
 
   @media (max-width: 450px) {
     margin-top: 0px;
     margin-bottom: 10px;
   }
+`;
+
+const PlayFrameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+  gap: 15px;
 `;
 
 const CardDetails = styled.div``;
@@ -156,13 +176,15 @@ const Name = styled.div`
 `;
 
 const Profile = styled.div`
-  background-color: rgb(4, 108, 108);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   width: 30px;
   height: 28px;
   border-radius: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
+  font-weight: 500;
 `;
 
 const About = styled.div`
@@ -191,6 +213,7 @@ const Top = styled.div`
     position: absolute;
     right: 8px;
     top: 8px;
+    z-index: 2;
   }
 `;
 
@@ -206,20 +229,19 @@ const FavoriteIconStyled = styled(FavoriteIcon)`
   position: absolute;
   right: 8px;
   top: 8px;
-  color: ${({ isFavorite }) => (isFavorite ? "red" : "#ccc")};
+  color: ${({ isFavorite }) => (isFavorite ? "#ff4757" : "#ccc")};
   cursor: pointer;
-  transition: color 1s ease-in-out, transform 0.7s ease-in-out,
-    box-shadow 1s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
   &:hover {
-    transition: color 0.4s ease-in-out, transform 0.4s ease-in-out;
-    color: ${({ isFavorite }) => (isFavorite ? "red" : "#ccccccde")};
-    transform: scale(1.7);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: ${({ isFavorite }) => (isFavorite ? "#ff3742" : "#fff")};
+    transform: scale(1.2);
+    filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.4));
   }
 
   &:active {
-    transform: scale(1.3);
+    transform: scale(1.1);
   }
 `;
 
@@ -228,28 +250,43 @@ const PlayButtonStyled = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  padding: 10px;
+  padding: 15px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 
   ${Card}:hover & {
     opacity: 1;
   }
 
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+
   ${({ isPlaying }) =>
     isPlaying &&
-    `opacity:1;
+    `opacity: 1;
+     background: rgba(240, 147, 251, 0.2);
+     border-color: rgba(240, 147, 251, 0.3);
   `}
 `;
 
 const PlayArrowIconStyled = styled(PlayArrowIcon)`
-  color: #f8f8f8;
-  font-size: 60px;
+  color: #ffffff;
+  font-size: 40px !important;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 `;

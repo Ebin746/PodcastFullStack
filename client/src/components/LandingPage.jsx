@@ -179,14 +179,12 @@ const HeroSection = styled.section`
   }
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    justify-content: center; /* Center content vertically */
+    flex-direction: column-reverse; /* Changed from 'column' to 'column-reverse' */
+    justify-content: center;
     text-align: center;
     padding: 2rem 1rem;
   }
 `;
-
-
 const HeroContent = styled.div`
   flex: 1;
   max-width: 600px;
@@ -194,8 +192,10 @@ const HeroContent = styled.div`
 
   @media (max-width: 768px) {
     max-width: 100%;
+    margin-top: 2rem; // Adds spacing below the visual
   }
 `;
+
 
 const MainTitle = styled.h1`
   font-size: 4rem;
@@ -277,7 +277,7 @@ const HeroVisual = styled.div`
   animation: ${fadeInUp} 1s ease-out 0.4s both;
 
   @media (max-width: 768px) {
-    display: none;
+    // make it responsive 
   }
 `;
 
