@@ -180,11 +180,12 @@ const HeroSection = styled.section`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    justify-content: center; /* Center content vertically */
     text-align: center;
     padding: 2rem 1rem;
-    height: 100vh;
   }
 `;
+
 
 const HeroContent = styled.div`
   flex: 1;

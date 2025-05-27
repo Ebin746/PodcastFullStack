@@ -188,11 +188,16 @@ const MenuContainer = styled.div`
   @media (max-width: 1100px) {
     position: fixed;
     z-index: 1000;
-    left: ${(props) => (props.menuOpen ? "0" : "-100%")};
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: ${(props) => props.menuOpen ? '20px 0 40px rgba(0,0,0,0.1)' : 'none'};
+    left: 0;
+    top: 0;
+    transform: ${({ menuOpen }) => (menuOpen ? "translateX(0)" : "translateX(-100%)")};
+    opacity: ${({ menuOpen }) => (menuOpen ? 1 : 0)};
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), 
+                opacity 0.4s ease;
+    box-shadow: ${({ menuOpen }) => menuOpen ? "20px 0 40px rgba(0,0,0,0.1)" : "none"};
   }
 `;
+
 
 const Header = styled.div`
   display: flex;
