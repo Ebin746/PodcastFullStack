@@ -15,18 +15,18 @@ const UserSchema = new mongoose.Schema({
     required: true, // ✅ Correct spelling
   },
 
-  // ✅ Rename 'favarates' to 'favorites' (correct spelling)
   favorites: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Podcast",
     default: [],
-    require:false
+    required:false
   },
 
   uploads: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Podcast",
+       required:false
     },
   ],
 

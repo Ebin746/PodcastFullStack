@@ -62,7 +62,7 @@ const DashBord = () => {
       </LandingSection>
       
       {/* Content Section - Shows loading or actual content */}
-      {!isLoading ? (
+      {isLoading ? (
         // Loading state with same structure as main content
         <PodcastContentSection id="podcast-content">
           <Loading />

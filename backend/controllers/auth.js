@@ -15,6 +15,8 @@ const generateToken = (user) => {
 // Signup Function
 const signup = async (req, res, next) => {
   const { userName, email, password } = req.body;
+  console.log(userName);
+  
   try {
     let existingUser = await UserSchema.findOne({ email });
     if (existingUser) {
@@ -28,11 +30,19 @@ const signup = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    await user.save();
-    let token = generateToken(user);
+    // Add specific error handling for save operation
+    try {
+      const savedUser = await user.save();
+      console.log('User saved successfully:', savedUser._id);
+    } catch (saveError) {
+      console.error('Error saving user:', saveError);
+      return res.status(500).json({ message: "Error saving user to database", error: saveError.message });
+    }
 
+    let token = generateToken(user);
     res.status(200).json({ message: "Signup successful", user, token });
   } catch (error) {
+    console.error('Signup error:', error);
     next(error);
   }
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Trash2, Headphones, PenLine, Upload } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
-import Loading from "../Loading/Loading";
+import Loading from "../Loading/Card";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {

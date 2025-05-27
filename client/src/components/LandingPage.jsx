@@ -3,16 +3,12 @@ import styled, { keyframes } from "styled-components";
 
 const LandingPage = ({ onNavigate }) => {
   const [isVisible, setIsVisible] = useState(false);
-     const token = localStorage.getItem("token"); 
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  const handleNavigation = (path) => {
-    if (onNavigate) {
-      onNavigate(path);
-    }
-  };
+  
 
   const scrollToContent = () => {
     const contentSection = document.getElementById('podcast-content');
@@ -35,10 +31,7 @@ const LandingPage = ({ onNavigate }) => {
             comedy to education - your perfect podcast awaits.
           </Subtitle>
           <CTAButtons>
-            {token &&<PrimaryButton onClick={() =>handleNavigation('/upload')}>
-              <ButtonIcon>🎙️</ButtonIcon>
-              Create Podcast
-            </PrimaryButton>}
+
             <SecondaryButton onClick={scrollToContent}>
               <ButtonIcon>⬇</ButtonIcon>
               Explore Podcasts

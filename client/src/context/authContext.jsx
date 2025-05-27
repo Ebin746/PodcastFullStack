@@ -28,13 +28,12 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("token"); 
     if (token) {
           fetchUser();
-    }else{
-      return;
     }
   }, []);
 
   const login = async (credentials) => {
     try {
+      console.log(credentials)
       const { data } = await axiosInstance.post("/login", credentials);
       localStorage.setItem("token", data.token); 
       setUser(data.user);

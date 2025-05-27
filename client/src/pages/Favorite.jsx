@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axiosInstance from '../utils/axiosInstance'
 import { useAudio } from '../context/audioContext'
 import { useAuth } from '../context/authContext'
-import Loading from "../Loading/Loading"
+import Loading from "../Loading/Card"
 import { toast } from 'react-toastify';  // Import Toast
 import 'react-toastify/dist/ReactToastify.css';  // Import style
 const Favorite = () => {
@@ -85,6 +85,7 @@ const PodCast = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 60px;
+  
   align-items: center;
   padding-left: 30px;
   background-color: ${({ theme }) => theme.bgLight};
@@ -104,6 +105,7 @@ const Filter = styled.div`
   border: none;
   border-radius: 5px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 6px;
   font-size: 15px;
   color: ${({ theme }) => theme.text_primary};
