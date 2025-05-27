@@ -241,27 +241,6 @@ const CTAButtons = styled.div`
   }
 `;
 
-const PrimaryButton = styled.button`
-  background: linear-gradient(45deg, ${({ theme }) => theme.primary}, #ff6b9d);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(190, 26, 219, 0.3);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(190, 26, 219, 0.4);
-  }
-`;
 
 const SecondaryButton = styled.button`
   background: transparent;
@@ -297,6 +276,7 @@ const HeroVisual = styled.div`
   animation: ${fadeInUp} 1s ease-out 0.4s both;
 
   @media (max-width: 768px) {
-    margin-top: 2rem;
+    display: none;
   }
 `;
+
